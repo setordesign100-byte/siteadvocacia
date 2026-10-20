@@ -1,0 +1,35 @@
+{
+  "name": "siteadvocacia",
+  "version": "1.0.0",
+  "description": "Website institucional da RTM Advocacia",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "typecheck": "tsc --noEmit",
+    "build": "npm run typecheck && vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "playwright test",
+    "preview:export": "npm run build && node scripts/export-preview.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/setordesign100-byte/siteadvocacia.git"
+  },
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@fontsource/cormorant-garamond": "^5.3.0",
+    "@fontsource/manrope": "^5.3.0",
+    "lucide-react": "^1.59.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "axe-core": "^4.14.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4"
+  },
+  "private": true
+}
