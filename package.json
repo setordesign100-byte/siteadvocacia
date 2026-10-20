@@ -4,6 +4,7 @@
   "description": "Website institucional da RTM Advocacia",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
+    "start:local": "node scripts/start-local.mjs",
     "typecheck": "tsc --noEmit",
     "build": "npm run typecheck && vite build",
     "preview": "vite preview --host 0.0.0.0",

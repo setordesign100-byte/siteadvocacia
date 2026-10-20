@@ -16,16 +16,19 @@ O endereço `localhost` não serve para abrir essa cópia. Use o arquivo HTML.
 ## Quero desenvolver e acompanhar as alterações
 
 1. Instale **Node.js 24 LTS** pelo site oficial: https://nodejs.org/.
-2. Abra a pasta extraída no VS Code.
-3. Abra o terminal integrado na pasta que contém `package.json`.
-4. Execute:
+2. Na pasta extraída, abra **INICIAR-NO-WINDOWS.cmd** no Windows ou **INICIAR-NO-MAC.command** no Mac. O iniciador prepara as dependências e abre o navegador automaticamente. No Mac, a abertura por dois cliques pode depender das permissões do sistema; também é possível executar `bash INICIAR-NO-MAC.command` no terminal.
+3. Mantenha a janela do iniciador aberta enquanto usa o site.
+4. Para editar, abra essa mesma pasta no VS Code.
+
+No Linux ou para iniciar pelo terminal em qualquer sistema, execute na pasta que contém `package.json`:
 
 ```sh
-npm ci
-npm run dev
+npm run start:local
 ```
 
-5. Mantenha o terminal aberto e use o endereço informado pelo Vite, normalmente `http://localhost:5173`.
+O endereço exibido normalmente será `http://127.0.0.1:5173`. Se a porta estiver ocupada, o iniciador escolhe outra e informa o endereço correto. Ele utiliza apenas a interface local do computador, prepara as dependências na primeira execução e as atualiza quando o lockfile mudar. A primeira preparação precisa de internet. Se ocorrer um erro, a janela mostra a mensagem e permanece aberta nos atalhos Windows/Mac.
+
+O iniciador foi executado e validado em Linux com Node.js 24. Os atalhos de Windows e macOS precisam ser conferidos nesses sistemas; não foram executados na máquina do usuário.
 
 Alterações salvas nos arquivos **desse computador** aparecem automaticamente no navegador. Esta conversa na nuvem não edita diretamente os arquivos do seu computador. Para trabalhar com o assistente nesses arquivos, use o Codex no VS Code ou no terminal local. Alterações feitas na nuvem precisam ser transferidas ao computador antes de aparecerem na prévia local.
 
