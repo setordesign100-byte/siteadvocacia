@@ -1,10 +1,20 @@
 import { useEffect, useState } from 'react';
-import { ArrowUpRight, ArrowRight, ArrowDown, Plus, Minus, Menu, X, Scale, MoveUpRight, Check, ChevronRight } from 'lucide-react';
-import { practiceAreas, team, editorial } from './data/content';
+import { ArrowUpRight, ArrowRight, ArrowDown, Plus, Minus, Menu, X, MoveUpRight, Check, ChevronRight } from 'lucide-react';
+import { practiceAreas, team, editorial, homepageCopy as copy, processSteps, faqs } from './data/content';
+import { type ImageKey } from './data/images';
 import { Modal } from './components/Modal';
+import { EditorialImage } from './components/EditorialImage';
+import { EditorialHeading } from './components/EditorialHeading';
+import { usePageMotion } from './components/usePageMotion';
 
-type Panel = { kind: 'article'; index: number } | { kind: 'profile'; index: number } | { kind: 'privacy' } | null;
-const navItems = [['O escritório', 'escritorio'], ['Áreas de atuação', 'atuacao'], ['Nossa equipe', 'equipe'], ['Perspectivas', 'perspectivas']];
+type Panel = { kind: 'article' | 'profile' | 'practice'; index: number } | { kind: 'privacy' | 'terms' } | null;
+type Category = 'todos' | 'civil' | 'consumidor' | 'medico';
+const navItems = [['Início', 'inicio'], ['O escritório', 'escritorio'], ['Áreas de atuação', 'atuacao'], ['Equipe', 'equipe'], ['Publicações', 'publicacoes']];
+const categories: { id: Category; label: string }[] = [
+  { id: 'todos', label: 'Todos os temas' }, { id: 'civil', label: 'Direito Civil' },
+  { id: 'consumidor', label: 'Consumidor' }, { id: 'medico', label: 'Direito Médico' },
+];
+const practiceImages: ImageKey[] = ['civil-editorial', 'office-editorial', 'health-editorial'];
 
 function Brand({ footer = false }: { footer?: boolean }) {
   return <a href="#inicio" className={`brand ${footer ? 'brand-footer' : ''}`} aria-label="RTM ADVOCACIA — início">
@@ -13,119 +23,121 @@ function Brand({ footer = false }: { footer?: boolean }) {
   </a>;
 }
 
+function SectionLabel({ number, children, light = false }: { number: string; children: string; light?: boolean }) {
+  return <div className={`section-label ${light ? 'light' : ''}`}><span className="section-number">{number} /</span><span className="eyebrow">{children}</span></div>;
+}
+
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [expanded, setExpanded] = useState<string | null>('civil');
   const [panel, setPanel] = useState<Panel>(null);
   const [active, setActive] = useState('inicio');
   const [contactNotice, setContactNotice] = useState(false);
+  const [category, setCategory] = useState<Category>('todos');
+  usePageMotion();
 
   useEffect(() => {
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => { if (entry.isIntersecting) setActive(entry.target.id); });
-    }, { rootMargin: '-20% 0px -55% 0px' });
+    }, { rootMargin: '-15% 0px -50% 0px' });
     document.querySelectorAll('main section[id]').forEach(el => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
     if (!menuOpen) return;
-    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') { setMenuOpen(false); document.getElementById('menu-toggle')?.focus(); } };
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') { setMenuOpen(false); document.getElementById('menu-toggle')?.focus(); }
+    };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
   }, [menuOpen]);
+
+  const activePracticeIndex = Math.max(0, practiceAreas.findIndex(area => area.id === expanded));
+  const filteredArticles = editorial.map((article, index) => ({ ...article, index })).filter(article => category === 'todos' || article.categoryKey === category);
+  const panelTitle = !panel ? '' : panel.kind === 'article' ? editorial[panel.index].title : panel.kind === 'profile' ? team[panel.index].name : panel.kind === 'practice' ? practiceAreas[panel.index].detailsTitle : panel.kind === 'privacy' ? 'Privacidade e proteção de dados' : 'Termos de uso';
 
   return <>
     <a className="skip-link" href="#conteudo">Ir para o conteúdo</a>
     <div className="review-banner"><span className="review-dot" />Versão de apresentação <span className="banner-divider">/</span> Conteúdo institucional em revisão</div>
     <header className="header">
+      <div className="reading-progress" aria-hidden="true" />
       <div className="header-inner container">
         <Brand />
         <button id="menu-toggle" className="icon-button menu-toggle" aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'} aria-expanded={menuOpen} aria-controls="navigation" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</button>
         <nav id="navigation" className={menuOpen ? 'nav is-open' : 'nav'} aria-label="Navegação principal">
           {navItems.map(([label, id]) => <a key={id} href={`#${id}`} aria-current={active === id ? 'location' : undefined} onClick={() => setMenuOpen(false)}>{label}</a>)}
-          <a className="nav-contact" href="#contato" onClick={() => setMenuOpen(false)}>Vamos conversar <ArrowUpRight size={16} /></a>
+          <a className="nav-contact" href="#contato" onClick={() => setMenuOpen(false)}>Fale com o escritório <ArrowUpRight size={17} /></a>
         </nav>
       </div>
     </header>
 
     <main id="conteudo" tabIndex={-1}>
       <section id="inicio" className="hero">
-        <div className="hero-copy">
-          <div className="hero-copy-inner">
-            <span className="eyebrow"><span className="small-rule" /> DIREITO COM PROPÓSITO</span>
-            <h1>Clareza para decidir.<br />Proximidade<br />para <em>seguir.</em></h1>
-            <p>Por trás de cada questão jurídica, existe uma história.<br className="desktop-break" /> A nossa atuação começa por ouvir a sua.</p>
-            <a className="button button-blue" href="#escritorio">Conheça a RTM <ArrowUpRight size={19} /></a>
-            <div className="hero-bottom"><span>ATENÇÃO À SUA HISTÓRIA.<br /><strong>COMPROMISSO COM O SEU DIREITO.</strong></span><a href="#escritorio" className="scroll-arrow" aria-label="Explorar o escritório"><ArrowDown size={20} /></a></div>
-          </div>
-        </div>
-        <div className="hero-visual">
-          <img src="/images/architecture-1000.webp" srcSet="/images/architecture-640.webp 640w, /images/architecture-1000.webp 1000w" sizes="(max-width: 560px) 100vw, 48vw" alt="Composição arquitetônica de linhas curvas, luz e sombra" width="1000" height="1250" fetchPriority="high" />
-          <div className="hero-image-shade" />
-          <span className="image-caption">NOVOS OLHARES.<br />RELAÇÕES SÓLIDAS.</span>
-          <span className="image-index"><span /> RTM — ADVOCACIA</span>
-        </div>
+        <div className="hero-copy"><div className="hero-copy-inner">
+          <span className="eyebrow hero-enter"><span className="small-rule" />{copy.hero.label}</span>
+          <EditorialHeading as="h1" className="hero-enter" text={copy.hero.title} accent="seus direitos," />
+          <p className="hero-enter">{copy.hero.text}</p>
+          <div className="hero-actions hero-enter"><a className="button button-blue" href="#atuacao">{copy.hero.primaryAction}<ArrowUpRight size={19} /></a><a className="hero-secondary" href="#contato">{copy.hero.secondaryAction}<ArrowRight size={17} /></a></div>
+          <div className="hero-bottom"><span>ATUAÇÃO TÉCNICA.<br /><strong>ATENDIMENTO INDIVIDUALIZADO.</strong></span><a href="#escritorio" className="scroll-arrow" aria-label="Explorar o escritório"><ArrowDown size={20} /></a></div>
+        </div></div>
+        <div className="hero-visual"><EditorialImage image="architecture" priority sizes="(max-width: 700px) 100vw, 47vw" /><div className="hero-image-shade" /><span className="hero-visual-line" aria-hidden="true" /><span className="vertical-caption">PERSPECTIVA · CLAREZA · PROXIMIDADE</span><div className="hero-image-label"><span className="eyebrow">RTM ADVOCACIA</span><span>Um olhar atento.<br />Em cada decisão.</span><ArrowUpRight size={26} strokeWidth={1} /></div><span className="image-index"><span />CIVIL · CONSUMIDOR · MÉDICO</span></div>
       </section>
 
-      <div className="practice-strip" aria-label="Nossas áreas"><div className="container practice-strip-inner"><span>UMA ATUAÇÃO CONECTADA À SUA VIDA</span><a href="#area-civil">Direito Civil <ArrowUpRight size={15} /></a><a href="#area-consumidor">Direito do Consumidor <ArrowUpRight size={15} /></a><a href="#area-medico">Direito Médico <ArrowUpRight size={15} /></a></div></div>
+      <div className="practice-strip" aria-label="Principais serviços"><div className="container"><span className="eyebrow">PRINCIPAIS SERVIÇOS</span><div className="service-links">{copy.hero.services.map((service, index) => <a key={service} href={`#area-${index < 3 ? 'civil' : index < 5 ? 'consumidor' : 'medico'}`}>{service}<ArrowUpRight size={14} /></a>)}</div></div></div>
 
       <section id="escritorio" className="about section-pad container">
-        <div className="section-label"><span className="section-number">01 /</span><span className="eyebrow">O ESCRITÓRIO</span></div>
-        <div className="about-grid">
-          <h2>O Direito é sobre pessoas.<br />A nossa advocacia <em>também.</em></h2>
-          <div className="about-copy"><p className="lead">Entender o seu momento é o primeiro passo para uma orientação jurídica que faça sentido.</p><p>Na RTM Advocacia, o atendimento personalizado orienta a nossa forma de trabalhar. Escutamos com atenção, esclarecemos possibilidades e acompanhamos cada questão de perto.</p><p>Unimos uma visão contemporânea do Direito à proximidade no relacionamento. Porque confiança se constrói com presença, diálogo e responsabilidade.</p><a className="text-link" href="#equipe">Conheça quem está ao seu lado <ArrowUpRight size={18} /></a></div>
-        </div>
-        <div className="values"><div><span className="value-marker">01</span><h3>Escuta atenta</h3><p>Espaço para entender o que realmente importa para você.</p></div><div><span className="value-marker">02</span><h3>Orientação clara</h3><p>Informação acessível para decisões mais conscientes.</p></div><div><span className="value-marker">03</span><h3>Presença de verdade</h3><p>Um relacionamento próximo em cada etapa do caminho.</p></div></div>
+        <div data-reveal><SectionLabel number="01">{copy.about.label}</SectionLabel></div>
+        <div className="about-grid" data-reveal><EditorialHeading text={copy.about.title} accent="individualizado." /><div className="about-copy">{copy.about.paragraphs.map((paragraph, index) => <p className={index === 0 ? 'lead' : ''} key={paragraph}>{paragraph}</p>)}<a className="text-link" href="#equipe">{copy.about.action}<ArrowUpRight size={19} /></a></div></div>
+        <div className="about-editorial" data-reveal><figure className="editorial-photo"><EditorialImage image="office-editorial" sizes="(max-width: 700px) 100vw, 70vw" /><figcaption>ESPAÇO PARA O DIÁLOGO<span>Imagem ilustrativa</span></figcaption></figure><div className="about-statement"><span className="statement-mark" aria-hidden="true">“</span><p>{copy.about.commitment}</p><span className="eyebrow">NOSSA FORMA DE ATUAR</span><a href="#forma-atuacao" className="circle-link" aria-label="Conhecer nossa forma de atuar"><ArrowDown size={20} /></a></div></div>
       </section>
 
-      <section id="atuacao" className="practice section-pad">
-        <div className="container">
-          <div className="section-label light"><span className="section-number">02 /</span><span className="eyebrow">ÁREAS DE ATUAÇÃO</span></div>
-          <div className="practice-layout">
-            <div className="practice-intro"><h2>Olhar atento.<br />Atuação <em>precisa.</em></h2><p>Questões diferentes exigem perspectivas específicas. Conheça as áreas em que podemos orientar você.</p><div className="practice-seal"><Scale strokeWidth={1} size={44} /><span>CONHECIMENTO JURÍDICO.<br />SENSIBILIDADE HUMANA.</span></div></div>
-            <div className="practice-list">{practiceAreas.map(area => <article className={`practice-item ${expanded === area.id ? 'expanded' : ''}`} id={`area-${area.id}`} key={area.id}>
-              <h3><button id={`trigger-${area.id}`} aria-expanded={expanded === area.id} aria-controls={`details-${area.id}`} onClick={() => setExpanded(expanded === area.id ? null : area.id)}><span className="area-number">{area.number}</span><span>{area.title}<small>{area.tag}</small></span><span className="area-toggle">{expanded === area.id ? <Minus size={20} /> : <Plus size={20} />}</span></button></h3>
-              <div id={`details-${area.id}`} role="region" aria-labelledby={`trigger-${area.id}`} hidden={expanded !== area.id} className="area-details"><p>{area.text}</p><ul>{area.services.map(service => <li key={service}><span />{service}</li>)}</ul><a href="#contato" className="text-link">Converse com o escritório <ArrowUpRight size={17} /></a></div>
-            </article>)}</div>
-          </div>
+      <section id="atuacao" className="practice section-pad"><div className="container">
+        <div data-reveal><SectionLabel number="02" light>{copy.practice.label}</SectionLabel></div>
+        <div className="practice-layout"><div className="practice-intro" data-reveal><EditorialHeading text={copy.practice.title} accent="necessidades." /><p>{copy.practice.text}</p><figure className="practice-photo" key={activePracticeIndex}><EditorialImage image={practiceImages[activePracticeIndex]} /><figcaption><span>EM FOCO</span>{practiceAreas[activePracticeIndex].title}<span className="photo-number">0{activePracticeIndex + 1}</span></figcaption></figure></div>
+          <div className="practice-list" data-reveal data-reveal-delay="100">{practiceAreas.map((area, index) => <article className={`practice-item ${expanded === area.id ? 'expanded' : ''}`} id={`area-${area.id}`} key={area.id}>
+            <h3><button id={`trigger-${area.id}`} aria-expanded={expanded === area.id} aria-controls={`details-${area.id}`} onClick={() => setExpanded(expanded === area.id ? null : area.id)}><span className="area-number">{area.number}</span><span>{area.title}<small>{area.tag}</small></span><span className="area-toggle">{expanded === area.id ? <Minus size={20} /> : <Plus size={20} />}</span></button></h3>
+            <div id={`details-${area.id}`} role="region" aria-labelledby={`trigger-${area.id}`} hidden={expanded !== area.id} className="area-details"><p>{area.text}</p><ul>{area.services.map(service => <li key={service}><span />{service}</li>)}</ul><button className="text-link" onClick={() => setPanel({ kind: 'practice', index })}>Saiba mais sobre {area.title}<ArrowUpRight size={17} /></button></div>
+          </article>)}</div>
         </div>
+      </div></section>
+
+      <section id="forma-atuacao" className="process section-pad container">
+        <div data-reveal><SectionLabel number="03">{copy.process.label}</SectionLabel></div><div className="section-heading process-heading" data-reveal><EditorialHeading text={copy.process.title} accent="cada demanda." /><div>{copy.process.paragraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}</div></div>
+        <div className="process-steps">{processSteps.map((step, index) => <article className="process-step" key={step.number} data-reveal data-reveal-delay={index * 70}><span className="step-number">{step.number}</span><span className="step-track" aria-hidden="true" /><h3>{step.title}</h3><p>{step.text}</p></article>)}</div>
       </section>
 
-      <section className="manifesto" aria-label="Nossa forma de atuar"><div className="container manifesto-inner"><span className="quote-mark" aria-hidden="true">“</span><p>Conhecimento para orientar.<br /><em>Proximidade para compreender.</em></p><span className="eyebrow">ESSA É A NOSSA FORMA<br />DE FAZER ADVOCACIA.</span></div></section>
+      <section className="image-interlude" aria-label="Atendimento e atenção aos detalhes"><div className="interlude-photo"><EditorialImage image="office-editorial" sizes="100vw" /></div><div className="interlude-overlay" /><div className="container interlude-content" data-reveal><span className="eyebrow">RTM ADVOCACIA</span><p>Confiança, transparência<br />e <em>comunicação direta.</em></p><a href="#equipe" className="circle-link" aria-label="Conhecer a equipe"><ArrowUpRight size={26} /></a></div></section>
 
       <section id="equipe" className="team section-pad container">
-        <div className="section-label"><span className="section-number">03 /</span><span className="eyebrow">QUEM ESTÁ AO SEU LADO</span></div>
-        <div className="section-heading"><h2>Pessoas que fazem<br />a <em>diferença.</em></h2><p>Uma equipe que acredita no diálogo e no cuidado com cada história.</p></div>
-        <div className="team-grid">{team.map((person, index) => <button className="team-card" key={person.name} onClick={() => setPanel({ kind: 'profile', index })}>
-          <div className={`team-portrait ${person.shade}`}><span className="portrait-grid" /><span className="portrait-initial" aria-hidden="true">{person.initials}</span><span className="portrait-note">RETRATO EM BREVE</span><span className="portrait-arrow"><ArrowUpRight size={20} /></span></div>
-          <div className="team-info"><h3>{person.name}</h3><span>Equipe RTM Advocacia</span></div>
-        </button>)}</div>
-        <p className="editorial-note">Apresentações profissionais e fotografias em preparação.</p>
+        <div data-reveal><SectionLabel number="04">{copy.team.label}</SectionLabel></div><div className="section-heading" data-reveal><EditorialHeading text={copy.team.title} accent="RTM Advocacia." /><p>{copy.team.text}</p></div>
+        <div className="team-grid">{team.map((person, index) => <button className="team-card" key={person.name} onClick={() => setPanel({ kind: 'profile', index })} data-reveal data-reveal-delay={index * 60}><div className={`team-portrait ${person.shade}`}>{person.photo ? <img src={person.photo} alt={person.photoAlt || `Retrato de ${person.name}`} width="600" height="750" loading="lazy" decoding="async" /> : <><span className="portrait-grid" /><span className="portrait-initial" aria-hidden="true">{person.initials}</span><span className="portrait-note">FOTOGRAFIA EM BREVE</span></>}<span className="portrait-arrow"><ArrowUpRight size={21} /></span></div><div className="team-info"><div><h3>{person.name}</h3><span>{person.role}</span></div><span className="profile-link">Ver perfil<ArrowUpRight size={15} /></span></div></button>)}</div>
+        <p className="editorial-note">Fotografias, biografias e registros profissionais serão incluídos após a validação do escritório.</p>
       </section>
 
-      <section id="perspectivas" className="insights section-pad">
-        <div className="container"><div className="section-label"><span className="section-number">04 /</span><span className="eyebrow">PERSPECTIVAS</span></div><div className="section-heading"><h2>Informação que<br />abre <em>caminhos.</em></h2><p>O Direito mais perto do seu dia a dia.<br />Conteúdos para uma leitura inicial.</p></div>
-          <div className="insights-grid">{editorial.map((article, index) => <button className={`insight-card insight-${index}`} key={article.title} onClick={() => setPanel({ kind: 'article', index })}>
-            <div className="insight-art" aria-hidden="true"><span /><span /><span /><span /><ArrowUpRight size={24} /></div>
-            <div className="insight-body"><span className="eyebrow">{article.category}</span><h3>{article.title}</h3><div className="insight-meta"><span>{article.time}</span><span>Ler conteúdo <ArrowRight size={16} /></span></div></div>
-          </button>)}</div><p className="editorial-note">Conteúdos introdutórios em revisão editorial. Não substituem a análise individual de um profissional.</p>
-        </div>
-      </section>
+      <section id="publicacoes" className="insights section-pad"><span id="perspectivas" className="anchor-alias" /><div className="container">
+        <div data-reveal><SectionLabel number="05">{copy.publications.label}</SectionLabel></div><div className="section-heading" data-reveal><EditorialHeading text={copy.publications.title} accent="informação." /><p>{copy.publications.text}</p></div>
+        <div className="publication-toolbar"><div className="category-filters" role="group" aria-label="Filtrar publicações por área">{categories.map(item => <button aria-pressed={category === item.id} key={item.id} onClick={() => setCategory(item.id)}>{item.label}</button>)}</div><span className="result-count" role="status" aria-live="polite">{filteredArticles.length} {filteredArticles.length === 1 ? 'conteúdo' : 'conteúdos'}</span></div>
+        <div className={`insights-grid ${category !== 'todos' ? 'is-filtered' : ''}`}>{filteredArticles.map(article => <button className="insight-card" key={article.title} onClick={() => setPanel({ kind: 'article', index: article.index })}><div className="insight-art"><EditorialImage image={article.imageKey} decorative sizes="(max-width: 700px) 100vw, (max-width: 1000px) 50vw, 40vw" /><span className="insight-image-shade" /><span className="insight-open"><ArrowUpRight size={23} /></span></div><div className="insight-body"><span className="eyebrow">{article.category}</span><h3>{article.title}</h3><p>{article.excerpt}</p><div className="insight-meta"><span>PAUTA EM PREPARAÇÃO</span><span>Ver tema<ArrowRight size={16} /></span></div></div></button>)}</div>
+        <p className="editorial-note">Pautas sugeridas em preparação editorial. Os artigos completos serão incluídos após revisão do escritório.</p>
+      </div></section>
 
-      <section id="contato" className="contact section-pad">
-        <div className="container contact-grid"><div><div className="section-label light"><span className="section-number">05 /</span><span className="eyebrow">VAMOS CONVERSAR</span></div><h2>O primeiro passo<br />é uma <em>conversa.</em></h2><p>Conte com uma escuta atenta para compreender<br className="desktop-break" /> o seu momento e as suas necessidades.</p></div>
-          <div className="contact-card"><span className="eyebrow">ATENDIMENTO RTM</span><h3>Estamos preparando<br />este espaço para você.</h3><p>Os canais oficiais de contato serão disponibilizados após a revisão das informações do escritório.</p><button className="button button-white" onClick={() => setContactNotice(!contactNotice)} aria-expanded={contactNotice}>Informações de atendimento {contactNotice ? <Check size={18} /> : <ArrowUpRight size={18} />}</button>{contactNotice && <div className="contact-notice" role="status">Este site está em apresentação. Telefone, e-mail, endereço e horários de atendimento ainda precisam ser confirmados pela RTM.</div>}<span className="contact-footnote">Seu primeiro contato será tratado com atenção e discrição.</span></div>
-        </div>
-      </section>
+      <section id="duvidas" className="faq section-pad container"><div className="faq-intro" data-reveal><SectionLabel number="06">{copy.faq.label}</SectionLabel><EditorialHeading text={copy.faq.title} accent="frequentes" /><p>Informações iniciais sobre as áreas e os serviços do escritório.</p><a href="#contato" className="text-link">Fale com o escritório<ArrowUpRight size={18} /></a></div><div className="faq-list" data-reveal data-reveal-delay="80">{faqs.map((faq, index) => <details className="faq-item" key={faq.question}><summary><span className="faq-number">0{index + 1}</span><span>{faq.question}</span><Plus className="faq-plus" size={18} /></summary><p>{faq.answer}</p></details>)}</div></section>
+
+      <section id="contato" className="contact section-pad"><div className="contact-decoration" aria-hidden="true" /><div className="container contact-grid">
+        <div data-reveal><SectionLabel number="07" light>{copy.contact.label}</SectionLabel><EditorialHeading text={copy.contact.title} accent="Médica." /><p>{copy.contact.text}</p></div>
+        <div className="contact-card" data-reveal data-reveal-delay="100"><span className="eyebrow">FALE COM NOSSA EQUIPE</span><h3>O primeiro passo<br />é uma conversa.</h3><p>Os canais oficiais de contato serão disponibilizados após a revisão das informações do escritório.</p><button className="button button-white" onClick={() => setContactNotice(!contactNotice)} aria-expanded={contactNotice} aria-controls="contact-information">Informações de atendimento{contactNotice ? <Check size={18} /> : <ArrowUpRight size={18} />}</button><div id="contact-information" hidden={!contactNotice} className="contact-notice" role="status">Este site está em apresentação. Telefone, e-mail, endereço e horários de atendimento ainda precisam ser confirmados pela RTM.</div><span className="contact-footnote">Atendimento próximo, com atenção a cada demanda.</span></div>
+      </div></section>
     </main>
 
-    <footer className="footer"><div className="container"><div className="footer-top"><Brand footer /><p>Direito com clareza.<br />Relações com confiança.</p><a href="#inicio" className="back-top">Voltar ao início <MoveUpRight size={17} /></a></div><div className="footer-bottom"><span>© {new Date().getFullYear()} RTM Advocacia.</span><button onClick={() => setPanel({ kind: 'privacy' })}>Privacidade e proteção de dados <ChevronRight size={13} /></button><span>Conteúdo informativo. Versão em revisão.</span></div></div></footer>
+    <footer className="footer"><div className="container"><div className="footer-top"><div><Brand footer /><p className="footer-description">{copy.footer.description}</p></div><div className="footer-navigation"><span className="eyebrow">EXPLORE</span>{navItems.map(([label, id]) => <a key={id} href={`#${id}`}>{label}</a>)}<a href="#contato">Contato</a></div><div className="footer-areas"><span className="eyebrow">ÁREAS DE ATUAÇÃO</span>{practiceAreas.map(area => <a href={`#area-${area.id}`} key={area.id}>{area.title}</a>)}<a href="#duvidas">Dúvidas frequentes</a></div><a href="#inicio" className="back-top" aria-label="Voltar ao início"><MoveUpRight size={22} /></a></div><div className="footer-bottom"><span>© {new Date().getFullYear()} RTM Advocacia.</span><div><button onClick={() => setPanel({ kind: 'privacy' })}>Privacidade e proteção de dados<ChevronRight size={13} /></button><button onClick={() => setPanel({ kind: 'terms' })}>Termos de uso<ChevronRight size={13} /></button></div><span>Identificação profissional e conteúdo em revisão.</span></div></div></footer>
 
-    {panel && <Modal title={panel.kind === 'article' ? editorial[panel.index].title : panel.kind === 'profile' ? team[panel.index].name : 'Privacidade e proteção de dados'} onClose={() => setPanel(null)}>
-      {panel.kind === 'article' && <><span className="modal-category">{editorial[panel.index].category} · CONTEÚDO EM REVISÃO</span><p>{editorial[panel.index].text}</p><aside className="modal-disclaimer">Este conteúdo tem caráter informativo e não constitui orientação jurídica individual. Cada situação deve ser avaliada por profissional habilitado.</aside><a href="#contato" className="text-link" onClick={() => setPanel(null)}>Informações de atendimento <ArrowUpRight size={18} /></a></>}
-      {panel.kind === 'profile' && <><p>Integrante da equipe RTM Advocacia.</p><p>A apresentação profissional está em preparação. A biografia, o nome completo, a fotografia e o registro na OAB serão incluídos após a validação do escritório.</p><a href="#contato" className="text-link" onClick={() => setPanel(null)}>Conheça os canais de atendimento <ArrowUpRight size={18} /></a></>}
+    {panel && <Modal title={panelTitle} onClose={() => setPanel(null)}>
+      {panel.kind === 'practice' && <><div className="modal-photo"><EditorialImage image={practiceImages[panel.index]} /></div>{practiceAreas[panel.index].detailsIntro.map(text => <p key={text}>{text}</p>)}<div className="service-details">{practiceAreas[panel.index].details.map(detail => <div key={detail.title}><h3>{detail.title}</h3><p>{detail.text}</p></div>)}</div><a href="#contato" className="text-link" onClick={() => setPanel(null)}>Entre em contato<ArrowUpRight size={18} /></a></>}
+      {panel.kind === 'article' && <><div className="modal-photo"><EditorialImage image={editorial[panel.index].imageKey} /></div><span className="modal-category">{editorial[panel.index].category} · PAUTA EM PREPARAÇÃO</span><p>{editorial[panel.index].text}</p><aside className="modal-disclaimer">Tema sugerido para publicação. O artigo completo ainda está em preparação e depende da revisão do escritório.</aside><a href="#contato" className="text-link" onClick={() => setPanel(null)}>Informações de atendimento<ArrowUpRight size={18} /></a></>}
+      {panel.kind === 'profile' && <><p>Integrante da equipe RTM Advocacia.</p><p>A apresentação profissional está em preparação. A biografia, o nome completo, a fotografia e o registro na OAB serão incluídos após a validação do escritório.</p><a href="#contato" className="text-link" onClick={() => setPanel(null)}>Conheça os canais de atendimento<ArrowUpRight size={18} /></a></>}
       {panel.kind === 'privacy' && <><p>Esta versão de apresentação não contém formulário de contato, ferramentas de publicidade ou análise de audiência e não utiliza cookies ou armazenamento local pela aplicação. As fontes e imagens são servidas junto com o próprio site.</p><p>A infraestrutura de hospedagem poderá processar dados técnicos de acesso, como endereço IP, de acordo com sua configuração. O responsável pelo tratamento, o canal para exercício dos direitos dos titulares, as bases legais e os prazos de retenção precisam ser confirmados antes da publicação.</p><aside className="modal-disclaimer">Aviso preliminar em revisão. A versão definitiva deverá refletir os serviços e processos efetivamente utilizados pelo escritório.</aside></>}
+      {panel.kind === 'terms' && <><p>Os conteúdos desta apresentação são informativos e não substituem a análise individualizada de um profissional habilitado. A consulta ao site não constitui contratação de serviços jurídicos.</p><p>As imagens de ambientes e objetos são ilustrativas. Os canais de atendimento, as apresentações dos profissionais e os textos editoriais estão em revisão.</p><aside className="modal-disclaimer">Documento preliminar. Os termos definitivos serão validados pelo escritório antes da publicação.</aside></>}
     </Modal>}
   </>;
 }

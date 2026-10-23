@@ -8,5 +8,6 @@ import '@fontsource/cormorant-garamond/latin-400-italic.css';
 import '@fontsource/cormorant-garamond/latin-500.css';
 import App from './App';
 import './styles.css';
+import './visual-refresh.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>);

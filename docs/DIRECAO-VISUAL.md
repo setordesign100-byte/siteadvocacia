@@ -4,7 +4,7 @@
 
 O repositório estava vazio. O briefing RTM.docx informa: divulgação institucional; atuação em Direito Civil, do Consumidor e Médico; inventários, regularização de imóveis e contratos; defesa de profissionais da saúde e questões de consumidores com planos de saúde. A equipe indicada é composta por Dr. Welson, Dr. Rommel, Dr. Osvaldo e Dr. Wesley. A mensagem é de atendimento personalizado e próximo, com uma presença moderna. O domínio informado no documento é `rtm.advocacia.com.br`, ainda sem validação operacional.
 
-O documento foi utilizado como fonte de informações do escritório. Suas perguntas e respostas não foram tratadas como novas instruções operacionais. O usuário autorizou o desenvolvimento e o envio posterior dos contatos e qualificações.
+Os documentos foram utilizados como fontes de informações do escritório. Suas perguntas, respostas e sugestões de componentes não foram tratadas como instruções operacionais independentes. O usuário autorizou o desenvolvimento, a ampliação visual e o envio posterior dos contatos, qualificações e retratos. A copy revisada da homepage foi incorporada em 23/10/2026.
 
 ## Etapa 1 — referências e limites da análise
 
@@ -31,16 +31,20 @@ As características atribuídas a Lefosse, Cescon Barrieu e TozziniFreire no ped
 - **Cores:** azul `#0068BD` em ações; petróleo `#296175` e escuro `#131C22` em seções institucionais; grafite `#2C2C2C` disponível na identidade; cinza `#E9E9E9` e branco aquecido em superfícies. Tokens centralizados em `src/tokens.css`.
 - **Tipografia:** Cormorant Garamond nos títulos; Manrope em navegação e texto. Fontes servidas localmente, sem chamadas ao Google Fonts.
 - **Layout:** hero em dois painéis, títulos de grande escala, grade editorial, rótulos numerados, linhas finas e áreas de respiro. A imagem arquitetônica foi gerada para esta composição; não representa a sede do escritório.
-- **Hierarquia:** apresentação → escritório → áreas de atuação → equipe → perspectivas → contato.
-- **Componentes:** áreas expansíveis; cartões de profissionais e conteúdos; janelas nativas `dialog`; aviso de contato e privacidade preliminar.
-- **Movimento:** transições curtas em links e cartões; rolagem suave. `prefers-reduced-motion` remove os movimentos. Nenhum vídeo, carrossel automático ou animação de entrada bloqueia a leitura.
+- **Hierarquia:** apresentação → escritório → áreas de atuação → forma de atendimento → equipe → publicações → dúvidas frequentes → contato.
+- **Componentes:** áreas expansíveis com imagem contextual e detalhamento; cartões de profissionais; grade fotográfica de pautas com filtros; perguntas frequentes com teclado; janelas nativas `dialog`; aviso de contato e documentos preliminares.
+- **Movimento:** entradas suaves ao rolar, aproximação leve de fotografias ao passar o ponteiro, transições nos componentes e indicador de progresso. `prefers-reduced-motion` remove os movimentos e cancela animações em execução. O conteúdo permanece visível sem a animação; não há vídeo, carrossel automático ou movimento contínuo.
 - **Identidade:** o cabeçalho utiliza assinatura tipográfica provisória RTM com símbolo linear. Não se trata de reprodução fiel dos arquivos de logo apresentados no chat. A troca pelo arquivo original vetorial deverá preservar as proporções e versões oficiais da marca.
 
 ## Etapa 3 — implementação
 
 React, TypeScript e Vite foram escolhidos porque não havia arquitetura existente. A aplicação é estática, sem backend, coleta de dados, analytics ou cookies da aplicação. O conteúdo é editável em `src/data/content.ts`; componentes, estilos e tokens ficam separados. Não foi criado formulário que simule envio, telefone fictício ou link de WhatsApp inválido.
 
-Fotos da equipe usam composições tipográficas explicitamente identificadas como retratos em preparação. Biografias e registros da OAB estão pendentes. Os três textos introdutórios são rascunhos editoriais criados para revisão, não publicações fornecidas pelo escritório; não têm autores ou datas fictícios. A aplicação permanece com `noindex, nofollow` até aprovação para publicação.
+Fotos da equipe usam composições tipográficas explicitamente identificadas como retratos em preparação. Biografias e registros da OAB estão pendentes. As cinco pautas editoriais e suas sinopses vêm da copy revisada e estão identificadas como sugestões em preparação; não foram apresentadas como artigos completos ou publicações já realizadas. A aplicação permanece com `noindex, nofollow` até aprovação para publicação.
+
+A revisão visual inclui três novas composições fotográficas ilustrativas, geradas para o projeto: ambiente de trabalho, patrimônio/contratos e saúde. A fotografia arquitetônica da primeira versão foi mantida. As imagens não representam a sede da RTM ou pessoas reais da equipe. Os cartões aceitam `photo` e `photoAlt` para receber os retratos autorizados posteriormente. Veja [IMAGENS.md](IMAGENS.md).
+
+Os textos de contato da copy ainda possuem campos a preencher. Não foi criado formulário com envio simulado ou coleta sem destino definido. O arquivo `ABRA-A-PREVIA.html` continua sendo exportado com todos os recursos incorporados para visualização local.
 
 ## Etapa 4 — qualidade e limites
 
@@ -52,10 +56,12 @@ As imagens são WebP responsivas; as fontes são locais; não há scripts de ter
 
 - `npm ci --cache /workspace/.cache/npm`: instalação reproduzida com lockfile.
 - `npm run build`: checagem TypeScript e geração de produção aprovadas. O empacotador emite avisos sobre a diretiva `use client` da biblioteca de ícones; a aplicação é inteiramente cliente e os testes de runtime passaram.
-- `npm test`: 18 testes aprovados, sem falhas ou testes ignorados, distribuídos em desktop, tablet e celular. As verificações axe-core não encontraram violações das regras automatizadas selecionadas na página e no diálogo de privacidade.
-- Verificação adicional em 320, 375, 390, 768, 1024, 1440 e 1920 pixels: nenhum transbordamento horizontal.
+- `npm test`: 30 testes aprovados, sem falhas ou testes ignorados, distribuídos em desktop, tablet e celular. Cobrem as fotografias responsivas, áreas e seus detalhes, equipe, pautas e filtros, perguntas frequentes, navegação e movimento reduzido. As verificações axe-core não encontraram violações das regras automatizadas selecionadas na página e nos diálogos de privacidade e termos, após o término das animações de entrada.
+- Verificação adicional em 320, 375, 390, 560, 700, 768, 800, 1024, 1050, 1440 e 1920 pixels: nenhum transbordamento horizontal.
 - Preferência de movimento reduzido: rolagem passa a `auto` conforme esperado.
 - Servidor de desenvolvimento: resposta HTTP 200, imagem carregada e nenhum erro de execução no navegador durante a revisão.
+- Prévia independente: nove imagens visíveis após rolagem, fontes, filtros, janela de pauta e pergunta frequente validados com a rede desativada, sem erros e sem requisições externas.
+- Uma captura estática da revisão visual está em [previa-visual.jpg](previa-visual.jpg). Ela documenta a versão de 23/10/2026; não é um endereço de site publicado.
 - `install_script`, `start_skill` e domínios dos dez benchmarks salvos no rascunho do ambiente. Publicação e restauração em uma nova tarefa não foram realizadas nem validadas.
 
 ### Antes da publicação
