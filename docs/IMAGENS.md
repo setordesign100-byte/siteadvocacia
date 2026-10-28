@@ -5,12 +5,12 @@ As imagens editoriais de ambientes, objetos e cenas de atendimento são composi�
 | Base em `public/images/` | Uso | Variantes |
 | --- | --- | --- |
 | `architecture` | Recurso da versão inicial, fora do banner atual | 640 e 1000 px |
-| `office-editorial` | Apresentação institucional e faixa editorial | 640 e 1200 px |
+| `office-editorial` | Apresentação institucional: diálogo durante o atendimento jurídico | 640 e 1200 px |
 | `civil-editorial` | Recurso da versão inicial, fora da página atual | 640 e 1200 px |
 | `health-editorial` | Direito Médico e planos de saúde | 640 e 1200 px |
 | `legal-specialties-hero` | Banner de largura total com atendimento jurídico e análise de documentos | 800 e 1600 px |
 | `property-editorial` | Cartão de Direito Civil | 640 e 1200 px |
-| `consultation-editorial` | Segunda imagem institucional de atendimento | 640 e 1200 px |
+| `consultation-editorial` | Imagem institucional sobreposta: pesquisa jurídica e análise de um caso | 640 e 1200 px |
 | `consumer-rights-editorial` | Cartão de Direito do Consumidor | 640 e 1200 px |
 | `law-library-editorial` | Faixa institucional de conhecimento e confiança | 800 e 1600 px |
 | `inheritance-editorial` | Publicação sobre inventário e sucessão | 640 e 1200 px |
@@ -24,6 +24,8 @@ Todas as variantes são WebP. O componente `EditorialImage` centraliza os tamanh
 Em 28/10/2026, o banner dividido foi substituído por uma fotografia única em largura total. A imagem principal passou a mostrar contratos, uma maquete residencial e um estetoscópio, relacionando a composição às três áreas de atuação. A fotografia arquitetônica anterior foi preservada como recurso do projeto, sem ser utilizada como banner. Os cartões fotográficos de áreas abrem o detalhamento correspondente.
 
 Na revisão seguinte, a imagem do banner foi trocada por uma cena mais natural de consulta jurídica: mãos anônimas revisando documentos, sem rostos ou identificação de profissionais. O banner tem 800 px de altura no desktop (larguras acima de 800 px); em tablet e celular a altura acompanha o conteúdo. Tamanhos de texto e espaçamentos foram ajustados para manter o título, as ações e o rodapé visíveis. A imagem de 1600 px ocupa aproximadamente 45 KB em WebP.
+
+Na seção “O escritório”, as duas fotografias de mobiliário foram substituídas por cenas ligadas à atuação jurídica. A principal mostra uma conversa à mesa, com participantes sem rostos identificáveis; a imagem sobreposta mostra pesquisa em livro jurídico com marcadores e documentos. São composições ilustrativas, sem representar clientes ou profissionais reais da RTM. Cada versão de 1200 px ocupa aproximadamente 57 KB em WebP, com uma variante menor para telas pequenas. A composição sobreposta e o destaque para o compromisso do escritório foram mantidos.
 
 Os originais de geração foram preservados no ambiente em `/workspace/generated_images`, fora do código publicado. As versões otimizadas necessárias para o site estão no GitHub.
 

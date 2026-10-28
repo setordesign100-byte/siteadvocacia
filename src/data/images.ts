@@ -2,7 +2,7 @@ export const images = {
   'office-editorial': {
     small: '/images/office-editorial-640.webp', large: '/images/office-editorial-1200.webp',
     smallWidth: 640, width: 1200, height: 800,
-    alt: 'Ambiente de trabalho iluminado por grandes janelas, em imagem ilustrativa.',
+    alt: 'Conversa entre duas pessoas à mesa, em imagem ilustrativa de escuta e atendimento jurídico.',
   },
   'health-editorial': {
     small: '/images/health-editorial-640.webp', large: '/images/health-editorial-1200.webp',
@@ -22,7 +22,7 @@ export const images = {
   'consultation-editorial': {
     small: '/images/consultation-editorial-640.webp', large: '/images/consultation-editorial-1200.webp',
     smallWidth: 640, width: 1200, height: 800,
-    alt: 'Mesa de reunião com caderno, caneta e cadeiras, em imagem ilustrativa de atendimento jurídico.',
+    alt: 'Consulta a livro jurídico com marcadores e documentos de um caso, em imagem ilustrativa de análise cuidadosa.',
   },
   'consumer-rights-editorial': {
     small: '/images/consumer-rights-editorial-640.webp', large: '/images/consumer-rights-editorial-1200.webp',
