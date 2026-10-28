@@ -47,9 +47,12 @@ Gera `dist/rtm-preview.html` e `ABRA-A-PREVIA.html`, arquivos independentes com 
 - `src/components/EditorialImage.tsx` e `src/data/images.ts`: imagens locais responsivas.
 - `src/components/EditorialHeading.tsx`: títulos com destaque tipográfico, a partir da copy centralizada.
 - `src/components/usePageMotion.ts`: entradas progressivas e indicador de leitura, com suporte a movimento reduzido.
+- `src/components/HeroBanner.tsx`: banner fotográfico único em largura total, relacionado às especialidades.
+- `src/components/FloatingWhatsApp.tsx` e `src/data/contact.ts`: botão flutuante e número público confirmado do escritório. O link usa `wa.me` e abre uma mensagem pré-preenchida sem enviá-la automaticamente.
 - `src/tokens.css`, `src/styles.css` e `src/visual-refresh.css`: identidade visual, estilos compartilhados e composição fotográfica responsiva.
 - `public/images/`: arquitetura, ambiente de trabalho, patrimônio e saúde, gerados para o projeto e otimizados em WebP. Não são fotografias da sede ou da equipe.
 - `tests/site.spec.ts`: testes de comportamento e verificações axe-core.
+- `tests/whatsapp-links.test.mjs`: validação de números brasileiros e codificação segura da mensagem; executada pelo `npm test` antes do Playwright.
 - [Direção visual e limitações do benchmark](docs/DIRECAO-VISUAL.md): decisões, fontes, escopo e pendências.
 - [Imagens e preparação dos retratos](docs/IMAGENS.md): origem dos recursos e encaixe das fotos reais da equipe.
 - [Captura da versão visual](docs/previa-visual.jpg): imagem estática para revisão, sem instalação.

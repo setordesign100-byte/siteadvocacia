@@ -246,7 +246,7 @@ export const editorial = [
   {
     category: 'DIREITO CIVIL',
     categoryKey: 'civil',
-    imageKey: 'office-editorial',
+    imageKey: 'property-editorial',
     title: 'Regularização de imóveis: documentos e procedimentos',
     excerpt: 'Informações sobre etapas e requisitos envolvidos na regularização documental e registral.',
     text: 'Informações sobre etapas e requisitos envolvidos na regularização documental e registral.',
@@ -257,7 +257,7 @@ export const editorial = [
   {
     category: 'DIREITO CIVIL',
     categoryKey: 'civil',
-    imageKey: 'civil-editorial',
+    imageKey: 'consultation-editorial',
     title: 'Contratos civis: cláusulas e obrigações que exigem atenção',
     excerpt: 'Aspectos jurídicos relevantes na elaboração e na revisão de contratos.',
     text: 'Aspectos jurídicos relevantes na elaboração e na revisão de contratos.',

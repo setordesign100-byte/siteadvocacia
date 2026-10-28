@@ -30,9 +30,9 @@ As características atribuídas a Lefosse, Cescon Barrieu e TozziniFreire no ped
 - **Linguagem:** editorial, serena, contemporânea e próxima. Evitar apelos comerciais, promessas de resultado, métricas inventadas ou depoimentos.
 - **Cores:** azul `#0068BD` em ações; petróleo `#296175` e escuro `#131C22` em seções institucionais; grafite `#2C2C2C` disponível na identidade; cinza `#E9E9E9` e branco aquecido em superfícies. Tokens centralizados em `src/tokens.css`.
 - **Tipografia:** Cormorant Garamond nos títulos; Manrope em navegação e texto. Fontes servidas localmente, sem chamadas ao Google Fonts.
-- **Layout:** hero em dois painéis, títulos de grande escala, grade editorial, rótulos numerados, linhas finas e áreas de respiro. A imagem arquitetônica foi gerada para esta composição; não representa a sede do escritório.
+- **Layout:** banner com fotografia única em largura total, títulos sobrepostos com alto contraste, grade editorial, rótulos numerados, linhas finas e áreas de respiro. Em 28/10/2026 a abertura dividida foi substituída por uma composição relacionada às três especialidades: contratos, patrimônio imobiliário e saúde.
 - **Hierarquia:** apresentação → escritório → áreas de atuação → forma de atendimento → equipe → publicações → dúvidas frequentes → contato.
-- **Componentes:** áreas expansíveis com imagem contextual e detalhamento; cartões de profissionais; grade fotográfica de pautas com filtros; perguntas frequentes com teclado; janelas nativas `dialog`; aviso de contato e documentos preliminares.
+- **Componentes:** três cartões fotográficos de áreas com expansão do detalhamento correspondente; composição de duas imagens institucionais; cartões de profissionais; grade fotográfica de pautas com filtros; perguntas frequentes com teclado; janelas nativas `dialog`; WhatsApp flutuante e contato direto; documentos preliminares.
 - **Movimento:** entradas suaves ao rolar, aproximação leve de fotografias ao passar o ponteiro, transições nos componentes e indicador de progresso. `prefers-reduced-motion` remove os movimentos e cancela animações em execução. O conteúdo permanece visível sem a animação; não há vídeo, carrossel automático ou movimento contínuo.
 - **Identidade:** o cabeçalho utiliza assinatura tipográfica provisória RTM com símbolo linear. Não se trata de reprodução fiel dos arquivos de logo apresentados no chat. A troca pelo arquivo original vetorial deverá preservar as proporções e versões oficiais da marca.
 
@@ -42,9 +42,9 @@ React, TypeScript e Vite foram escolhidos porque não havia arquitetura existent
 
 Fotos da equipe usam composições tipográficas explicitamente identificadas como retratos em preparação. Biografias e registros da OAB estão pendentes. As cinco pautas editoriais e suas sinopses vêm da copy revisada e estão identificadas como sugestões em preparação; não foram apresentadas como artigos completos ou publicações já realizadas. A aplicação permanece com `noindex, nofollow` até aprovação para publicação.
 
-A revisão visual inclui três novas composições fotográficas ilustrativas, geradas para o projeto: ambiente de trabalho, patrimônio/contratos e saúde. A fotografia arquitetônica da primeira versão foi mantida. As imagens não representam a sede da RTM ou pessoas reais da equipe. Os cartões aceitam `photo` e `photoAlt` para receber os retratos autorizados posteriormente. Veja [IMAGENS.md](IMAGENS.md).
+A revisão visual inclui composições fotográficas ilustrativas geradas para o projeto: banner jurídico, ambiente de trabalho, atendimento, patrimônio/contratos, imóveis e saúde. A fotografia arquitetônica da primeira versão foi preservada fora do banner atual. As imagens não representam a sede da RTM ou pessoas reais da equipe. Os cartões aceitam `photo` e `photoAlt` para receber os retratos autorizados posteriormente. Veja [IMAGENS.md](IMAGENS.md).
 
-Os textos de contato da copy ainda possuem campos a preencher. Não foi criado formulário com envio simulado ou coleta sem destino definido. O arquivo `ABRA-A-PREVIA.html` continua sendo exportado com todos os recursos incorporados para visualização local.
+O WhatsApp foi confirmado pelo usuário e configurado em `src/data/contact.ts`: +55 (31) 99196-7003. O botão flutuante e o CTA de contato abrem o mesmo destino em nova aba, com uma mensagem inicial que depende de envio pelo visitante. E-mail, endereço e horários permanecem pendentes. Não foi criado formulário com envio simulado ou coleta sem destino definido. O arquivo `ABRA-A-PREVIA.html` continua sendo exportado com todos os recursos incorporados para visualização local.
 
 ## Etapa 4 — qualidade e limites
 
@@ -56,19 +56,19 @@ As imagens são WebP responsivas; as fontes são locais; não há scripts de ter
 
 - `npm ci --cache /workspace/.cache/npm`: instalação reproduzida com lockfile.
 - `npm run build`: checagem TypeScript e geração de produção aprovadas. O empacotador emite avisos sobre a diretiva `use client` da biblioteca de ícones; a aplicação é inteiramente cliente e os testes de runtime passaram.
-- `npm test`: 30 testes aprovados, sem falhas ou testes ignorados, distribuídos em desktop, tablet e celular. Cobrem as fotografias responsivas, áreas e seus detalhes, equipe, pautas e filtros, perguntas frequentes, navegação e movimento reduzido. As verificações axe-core não encontraram violações das regras automatizadas selecionadas na página e nos diálogos de privacidade e termos, após o término das animações de entrada.
+- `npm test`: 8 testes de construção de links de WhatsApp e 39 testes de navegador aprovados, sem falhas ou testes ignorados. Os testes de navegador são distribuídos em desktop, tablet e celular e cobrem banner integral, fotografias responsivas, cartões e detalhes de áreas, equipe, pautas e filtros, perguntas frequentes, navegação, WhatsApp e movimento reduzido. A abertura externa de WhatsApp é interceptada nos testes, sem envio de mensagens. As verificações axe-core não encontraram violações das regras automatizadas selecionadas na página e nos diálogos de privacidade e termos, após o término das animações de entrada.
 - Verificação adicional em 320, 375, 390, 560, 700, 768, 800, 1024, 1050, 1440 e 1920 pixels: nenhum transbordamento horizontal.
 - Preferência de movimento reduzido: rolagem passa a `auto` conforme esperado.
 - Servidor de desenvolvimento: resposta HTTP 200, imagem carregada e nenhum erro de execução no navegador durante a revisão.
-- Prévia independente: nove imagens visíveis após rolagem, fontes, filtros, janela de pauta e pergunta frequente validados com a rede desativada, sem erros e sem requisições externas.
-- Uma captura estática da revisão visual está em [previa-visual.jpg](previa-visual.jpg). Ela documenta a versão de 23/10/2026; não é um endereço de site publicado.
+- Prévia independente: 12 imagens visíveis após rolagem, fontes, filtros e destino do WhatsApp validados com a rede desativada, sem erros e sem requisições externas ao carregar o documento.
+- Uma captura estática da revisão visual está em [previa-visual.jpg](previa-visual.jpg). Ela documenta a versão de 28/10/2026; não é um endereço de site publicado.
 - `install_script`, `start_skill` e domínios dos dez benchmarks salvos no rascunho do ambiente. Publicação e restauração em uma nova tarefa não foram realizadas nem validadas.
 
 ### Antes da publicação
 
 1. Confirmar nome institucional e qualificações/inscrição da sociedade, quando aplicáveis.
 2. Incluir nomes completos, registros da OAB, biografias e fotos autorizadas da equipe.
-3. Confirmar telefone, WhatsApp, e-mail, endereço e horários; conectar os CTAs aos canais reais.
+3. Confirmar e-mail, endereço e horários. O WhatsApp já está conectado ao número confirmado; o escritório deve conferir o recebimento no aplicativo.
 4. Substituir a assinatura provisória pelo arquivo oficial do logo.
 5. Revisar áreas, textos institucionais e conteúdos informativos com os responsáveis.
 6. Definir controlador, canal de privacidade, serviços da hospedagem e política de retenção; atualizar o aviso conforme o tratamento real.

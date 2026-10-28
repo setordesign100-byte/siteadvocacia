@@ -4,12 +4,17 @@ As imagens de ambientes, arquitetura e objetos são composições geradas para e
 
 | Base em `public/images/` | Uso | Variantes |
 | --- | --- | --- |
-| `architecture` | Abertura arquitetônica | 640 e 1000 px |
+| `architecture` | Recurso da versão inicial, fora do banner atual | 640 e 1000 px |
 | `office-editorial` | Apresentação institucional e faixa editorial | 640 e 1200 px |
 | `civil-editorial` | Patrimônio, imóveis e contratos | 640 e 1200 px |
 | `health-editorial` | Direito Médico e planos de saúde | 640 e 1200 px |
+| `legal-specialties-hero` | Banner de largura total com contratos, imóvel e saúde | 800 e 1600 px |
+| `property-editorial` | Cartão de Direito Civil e pauta sobre imóveis | 640 e 1200 px |
+| `consultation-editorial` | Atendimento, cartão do Consumidor e pauta sobre contratos | 640 e 1200 px |
 
 Todas as variantes são WebP. O componente `EditorialImage` centraliza os tamanhos responsivos, a descrição e a prioridade de carregamento. Apenas a imagem principal tem prioridade alta; as demais usam carregamento adiado. Imagens repetidas reutilizam o mesmo recurso no cache do navegador. Não há requisições a bancos de imagens externos.
+
+Em 28/10/2026, o banner dividido foi substituído por uma fotografia única em largura total. A imagem principal passou a mostrar contratos, uma maquete residencial e um estetoscópio, relacionando a composição às três áreas de atuação. A fotografia arquitetônica anterior foi preservada como recurso do projeto, sem ser utilizada como banner. Os cartões fotográficos de áreas abrem o detalhamento correspondente.
 
 Os originais de geração foram preservados no ambiente em `/workspace/generated_images`, fora do código publicado. As versões otimizadas necessárias para o site estão no GitHub.
 

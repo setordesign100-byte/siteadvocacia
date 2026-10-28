@@ -21,19 +21,102 @@ test('loads revised content and valid section links without runtime errors or ov
 });
 
 test('editorial photographs load after scrolling and provide responsive sources', async ({ page }) => {
-  const photos = page.locator('.hero-visual img, .editorial-photo img, .practice-photo img, .interlude-photo img, .insight-art img');
-  await expect(photos).toHaveCount(9);
+  const photos = page.locator('.hero-visual img, .editorial-photo img, .about-inset img, .practice-visual-card > img, .interlude-photo img, .insight-art img');
+  await expect(photos).toHaveCount(12);
   for (const photo of await photos.all()) {
     await photo.scrollIntoViewIfNeeded();
     await expect.poll(() => photo.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth > 0)).toBe(true);
-    await expect(photo).toHaveAttribute('srcset', /640w,.*(?:1000|1200)w/);
+    await expect(photo).toHaveAttribute('srcset', /(?:640|800)w,.*(?:1000|1200|1600)w/);
     expect(await photo.getAttribute('width')).toBeTruthy();
     expect(await photo.getAttribute('height')).toBeTruthy();
   }
   const sources = await photos.evaluateAll(images => images.map(image => image.getAttribute('src') || ''));
-  for (const name of ['architecture', 'office-editorial', 'civil-editorial', 'health-editorial']) {
+  for (const name of ['legal-specialties-hero', 'office-editorial', 'civil-editorial', 'health-editorial', 'property-editorial', 'consultation-editorial']) {
     expect(sources.some(source => source.includes(name))).toBe(true);
   }
+  expect(sources.some(source => source.includes('architecture'))).toBe(false);
+});
+
+test('the immersive hero photograph fills the banner across the viewport', async ({ page }) => {
+  const hero = page.locator('.hero.hero-immersive');
+  // Entrance effects must settle before measuring the displayed photo bounds.
+  await hero.evaluate(async element => {
+    await Promise.all(element.getAnimations({ subtree: true }).map(animation => animation.finished.catch(() => undefined)));
+  });
+  const banner = await hero.boundingBox();
+  const visual = await hero.locator('.hero-visual').boundingBox();
+  const photo = await hero.locator('img').boundingBox();
+  expect(banner).not.toBeNull();
+  expect(visual).not.toBeNull();
+  expect(photo).not.toBeNull();
+  const viewportWidth = await page.evaluate(() => window.innerWidth);
+  expect(Math.abs(banner!.x)).toBeLessThanOrEqual(1);
+  expect(Math.abs(banner!.width - viewportWidth)).toBeLessThanOrEqual(1);
+  for (const box of [visual!, photo!]) {
+    expect(Math.abs(box.x - banner!.x)).toBeLessThanOrEqual(1);
+    expect(Math.abs(box.y - banner!.y)).toBeLessThanOrEqual(1);
+    expect(Math.abs(box.width - banner!.width)).toBeLessThanOrEqual(1);
+    expect(Math.abs(box.height - banner!.height)).toBeLessThanOrEqual(1);
+  }
+  await expect(hero.locator('img')).toHaveAttribute('src', /legal-specialties-hero-1600\.webp$/);
+  await expect(hero.locator('img')).toHaveAttribute('sizes', '100vw');
+});
+
+test('each photographic service card opens its matching accordion', async ({ page }) => {
+  const cards = page.locator('.practice-visual-card');
+  await expect(cards).toHaveCount(3);
+  for (const [index, id, name] of [
+    [0, 'civil', 'Direito Civil'],
+    [1, 'consumidor', 'Direito do Consumidor'],
+    [2, 'medico', 'Direito Médico'],
+  ] as const) {
+    await expect(cards.nth(index)).toContainText(name);
+    await cards.nth(index).click();
+    await expect(page.locator(`#trigger-${id}`)).toHaveAttribute('aria-expanded', 'true');
+    await expect(page.locator(`#details-${id}`)).toBeVisible();
+    await expect(page.locator('.practice-item button[aria-expanded="true"]')).toHaveCount(1);
+  }
+});
+
+test('WhatsApp stays visible after scrolling and opens the confirmed contact without an external request', async ({ page, context }) => {
+  const message = 'Olá! Gostaria de informações sobre o atendimento da RTM Advocacia.';
+  const expectedHref = `https://wa.me/5531991967003?text=${encodeURIComponent(message)}`;
+  const automaticRequests: string[] = [];
+  const interceptedRequests: string[] = [];
+  page.on('request', request => {
+    if (new URL(request.url()).hostname === 'wa.me') automaticRequests.push(request.url());
+  });
+  await page.reload();
+  const floating = page.getByRole('link', { name: 'WhatsApp — fale com o escritório (abre em nova aba)', exact: true });
+  await expect(floating).toHaveAttribute('href', expectedHref);
+  await expect(floating).toHaveAttribute('target', '_blank');
+  await expect(floating).toHaveAttribute('rel', /\bnoopener\b/);
+  await expect(floating).toHaveAttribute('rel', /\bnoreferrer\b/);
+  await expect(page.getByRole('link', { name: 'Fale pelo WhatsApp', exact: true })).toHaveAttribute('href', expectedHref);
+  await page.locator('#publicacoes').scrollIntoViewIfNeeded();
+  await expect(floating).toBeVisible();
+  expect(await floating.evaluate(element => getComputedStyle(element).position)).toBe('fixed');
+  const box = await floating.boundingBox();
+  const viewport = await page.evaluate(() => ({ width: innerWidth, height: innerHeight }));
+  expect(box).not.toBeNull();
+  expect(box!.x).toBeGreaterThanOrEqual(0);
+  expect(box!.y).toBeGreaterThanOrEqual(0);
+  expect(box!.x + box!.width).toBeLessThanOrEqual(viewport.width);
+  expect(box!.y + box!.height).toBeLessThanOrEqual(viewport.height);
+  expect(automaticRequests).toEqual([]);
+  // Fulfill the destination inside the test; no request reaches WhatsApp.
+  await context.route('https://wa.me/**', async route => {
+    interceptedRequests.push(route.request().url());
+    await route.fulfill({ contentType: 'text/html', body: '<!doctype html><title>WhatsApp test destination</title>' });
+  });
+  const [popup] = await Promise.all([context.waitForEvent('page'), floating.click()]);
+  await popup.waitForLoadState('domcontentloaded');
+  await expect(popup).toHaveTitle('WhatsApp test destination');
+  const destination = new URL(popup.url());
+  expect(destination.pathname).toBe('/5531991967003');
+  expect(destination.searchParams.get('text')).toBe(message);
+  expect(interceptedRequests).toEqual([expectedHref]);
+  await popup.close();
 });
 
 test('practice areas expand, show the revised services and open their detail dialogs', async ({ page }) => {
@@ -107,7 +190,7 @@ test('each suggested publication opens its own preparation notice and contact di
   const contact = page.getByRole('button', { name: 'Informações de atendimento', exact: true });
   await contact.click();
   await expect(contact).toHaveAttribute('aria-expanded', 'true');
-  await expect(page.locator('#contact-information')).toContainText('ainda precisam ser confirmados');
+  await expect(page.locator('#contact-information')).toContainText('E-mail, endereço e horários de atendimento ainda precisam ser confirmados');
   await expect(page.locator('#contact-information')).toBeVisible();
   await contact.click();
   await expect(page.locator('#contact-information')).toBeHidden();
