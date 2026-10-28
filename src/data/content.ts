@@ -235,7 +235,7 @@ export const editorial = [
   {
     category: 'DIREITO CIVIL',
     categoryKey: 'civil',
-    imageKey: 'civil-editorial',
+    imageKey: 'inheritance-editorial',
     title: 'Inventário judicial e extrajudicial: diferenças e requisitos',
     excerpt: 'Uma análise das modalidades de inventário e dos critérios legais para sua realização.',
     text: 'Uma análise das modalidades de inventário e dos critérios legais para sua realização.',
@@ -246,7 +246,7 @@ export const editorial = [
   {
     category: 'DIREITO CIVIL',
     categoryKey: 'civil',
-    imageKey: 'property-editorial',
+    imageKey: 'registry-editorial',
     title: 'Regularização de imóveis: documentos e procedimentos',
     excerpt: 'Informações sobre etapas e requisitos envolvidos na regularização documental e registral.',
     text: 'Informações sobre etapas e requisitos envolvidos na regularização documental e registral.',
@@ -257,7 +257,7 @@ export const editorial = [
   {
     category: 'DIREITO CIVIL',
     categoryKey: 'civil',
-    imageKey: 'consultation-editorial',
+    imageKey: 'contracts-editorial',
     title: 'Contratos civis: cláusulas e obrigações que exigem atenção',
     excerpt: 'Aspectos jurídicos relevantes na elaboração e na revisão de contratos.',
     text: 'Aspectos jurídicos relevantes na elaboração e na revisão de contratos.',
@@ -268,7 +268,7 @@ export const editorial = [
   {
     category: 'DIREITO DO CONSUMIDOR',
     categoryKey: 'consumidor',
-    imageKey: 'health-editorial',
+    imageKey: 'health-plan-editorial',
     title: 'Negativa de cobertura por planos de saúde',
     excerpt: 'Considerações sobre direitos do consumidor, obrigações contratuais e documentação.',
     text: 'Considerações sobre direitos do consumidor, obrigações contratuais e documentação.',
@@ -279,7 +279,7 @@ export const editorial = [
   {
     category: 'DIREITO MÉDICO',
     categoryKey: 'medico',
-    imageKey: 'health-editorial',
+    imageKey: 'medical-liability-editorial',
     title: 'Responsabilidade civil dos profissionais da saúde',
     excerpt: 'Entenda os principais aspectos jurídicos relacionados à responsabilidade civil na atividade profissional.',
     text: 'Entenda os principais aspectos jurídicos relacionados à responsabilidade civil na atividade profissional.',

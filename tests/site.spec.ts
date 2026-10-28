@@ -31,10 +31,15 @@ test('editorial photographs load after scrolling and provide responsive sources'
     expect(await photo.getAttribute('height')).toBeTruthy();
   }
   const sources = await photos.evaluateAll(images => images.map(image => image.getAttribute('src') || ''));
-  for (const name of ['legal-specialties-hero', 'office-editorial', 'civil-editorial', 'health-editorial', 'property-editorial', 'consultation-editorial']) {
+  expect(new Set(sources).size).toBe(sources.length);
+  for (const name of ['legal-specialties-hero', 'office-editorial', 'health-editorial', 'property-editorial', 'consultation-editorial', 'consumer-rights-editorial', 'law-library-editorial', 'inheritance-editorial', 'registry-editorial', 'contracts-editorial', 'health-plan-editorial', 'medical-liability-editorial']) {
     expect(sources.some(source => source.includes(name))).toBe(true);
   }
   expect(sources.some(source => source.includes('architecture'))).toBe(false);
+  const articlePhotos = page.locator('.insight-card img');
+  for (const [index, image] of ['inheritance-editorial', 'registry-editorial', 'contracts-editorial', 'health-plan-editorial', 'medical-liability-editorial'].entries()) {
+    await expect(articlePhotos.nth(index)).toHaveAttribute('src', new RegExp(`${image}-1200\\.webp$`));
+  }
 });
 
 test('the immersive hero photograph fills the banner across the viewport', async ({ page }) => {
@@ -52,6 +57,11 @@ test('the immersive hero photograph fills the banner across the viewport', async
   const viewportWidth = await page.evaluate(() => window.innerWidth);
   expect(Math.abs(banner!.x)).toBeLessThanOrEqual(1);
   expect(Math.abs(banner!.width - viewportWidth)).toBeLessThanOrEqual(1);
+  if (viewportWidth > 800) expect(banner!.height).toBe(800);
+  const actions = await hero.locator('.hero-actions').boundingBox();
+  const footer = await hero.locator('.hero-footer').boundingBox();
+  expect(actions!.y + actions!.height).toBeLessThanOrEqual(banner!.y + banner!.height);
+  expect(footer!.y + footer!.height).toBeLessThanOrEqual(banner!.y + banner!.height);
   for (const box of [visual!, photo!]) {
     expect(Math.abs(box.x - banner!.x)).toBeLessThanOrEqual(1);
     expect(Math.abs(box.y - banner!.y)).toBeLessThanOrEqual(1);
@@ -71,6 +81,8 @@ test('each photographic service card opens its matching accordion', async ({ pag
     [2, 'medico', 'Direito Médico'],
   ] as const) {
     await expect(cards.nth(index)).toContainText(name);
+    const image = ['property-editorial', 'consumer-rights-editorial', 'health-editorial'][index];
+    await expect(cards.nth(index).locator('img')).toHaveAttribute('src', new RegExp(`${image}-1200\\.webp$`));
     await cards.nth(index).click();
     await expect(page.locator(`#trigger-${id}`)).toHaveAttribute('aria-expanded', 'true');
     await expect(page.locator(`#details-${id}`)).toBeVisible();

@@ -17,7 +17,7 @@ const categories: { id: Category; label: string }[] = [
   { id: 'todos', label: 'Todos os temas' }, { id: 'civil', label: 'Direito Civil' },
   { id: 'consumidor', label: 'Consumidor' }, { id: 'medico', label: 'Direito Médico' },
 ];
-const practiceImages: ImageKey[] = ['property-editorial', 'consultation-editorial', 'health-editorial'];
+const practiceImages: ImageKey[] = ['property-editorial', 'consumer-rights-editorial', 'health-editorial'];
 
 function Brand({ footer = false }: { footer?: boolean }) {
   return <a href="#inicio" className={`brand ${footer ? 'brand-footer' : ''}`} aria-label="RTM ADVOCACIA — início">
@@ -105,7 +105,7 @@ export default function App() {
         <div className="process-steps">{processSteps.map((step, index) => <article className="process-step" key={step.number} data-reveal data-reveal-delay={index * 70}><span className="step-number">{step.number}</span><span className="step-track" aria-hidden="true" /><h3>{step.title}</h3><p>{step.text}</p></article>)}</div>
       </section>
 
-      <section className="image-interlude" aria-label="Atendimento e atenção aos detalhes"><div className="interlude-photo"><EditorialImage image="consultation-editorial" sizes="100vw" /></div><div className="interlude-overlay" /><div className="container interlude-content" data-reveal><span className="eyebrow">RTM ADVOCACIA</span><p>Confiança, transparência<br />e <em>comunicação direta.</em></p><a href="#equipe" className="circle-link" aria-label="Conhecer a equipe"><ArrowUpRight size={26} /></a></div></section>
+      <section className="image-interlude" aria-label="Atendimento e atenção aos detalhes"><div className="interlude-photo"><EditorialImage image="law-library-editorial" sizes="100vw" /></div><div className="interlude-overlay" /><div className="container interlude-content" data-reveal><span className="eyebrow">RTM ADVOCACIA</span><p>Confiança, transparência<br />e <em>comunicação direta.</em></p><a href="#equipe" className="circle-link" aria-label="Conhecer a equipe"><ArrowUpRight size={26} /></a></div></section>
 
       <section id="equipe" className="team section-pad container">
         <div data-reveal><SectionLabel number="04">{copy.team.label}</SectionLabel></div><div className="section-heading" data-reveal><EditorialHeading text={copy.team.title} accent="RTM Advocacia." /><p>{copy.team.text}</p></div>
