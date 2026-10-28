@@ -29,7 +29,7 @@ O build inclui checagem de tipos. Os testes iniciam o servidor de preview na por
 npm run preview -- --port 4173 --strictPort
 ```
 
-O conteúdo publicado fica em `dist/`. O host deve servir `index.html` e `assets/` com HTTPS. Este projeto não configura hospedagem, DNS ou publicação automaticamente.
+O conteúdo publicado fica em `dist/`. O host deve servir `index.html`, `assets/`, `images/` e `favicon.svg` na raiz do domínio, com HTTPS. O pacote **[SITE-RTM-LOCAWEB.zip](SITE-RTM-LOCAWEB.zip)** contém a compilação atual e as licenças necessárias para enviar à hospedagem. Veja **[como publicar na Locaweb](COMO-PUBLICAR-NA-LOCAWEB.md)**. Este projeto não configura hospedagem, DNS ou publicação automaticamente.
 
 ## Prévia sem servidor
 
