@@ -18,6 +18,10 @@ As imagens editoriais de ambientes, objetos e cenas de atendimento são composi�
 | `contracts-editorial` | Publicação sobre contratos civis | 640 e 1200 px |
 | `health-plan-editorial` | Publicação sobre cobertura de planos de saúde | 640 e 1200 px |
 | `medical-liability-editorial` | Publicação sobre responsabilidade profissional na saúde | 640 e 1200 px |
+| `team-welson` | Retrato real do Dr. Welson, no cartão e no perfil | 450 e 900 px |
+| `team-rommel` | Retrato real do Dr. Rommel Trevenzoli, no cartão e no perfil | 450 e 900 px |
+| `team-osvaldo` | Retrato real do Dr. Osvaldo Marques, no cartão e no perfil | 450 e 900 px |
+| `team-wesley` | Retrato real do Dr. Wesley Rezende, no cartão e no perfil | 450 e 900 px |
 
 Todas as variantes são WebP. O componente `EditorialImage` centraliza os tamanhos responsivos, a descrição e a prioridade de carregamento. Apenas a imagem principal tem prioridade alta; as demais usam carregamento adiado. A página utiliza 12 fotografias editoriais diferentes: cada área, publicação e composição institucional tem uma imagem própria. A janela de detalhamento reutiliza a imagem do cartão correspondente para manter o contexto. Não há requisições a bancos de imagens externos.
 
@@ -31,9 +35,11 @@ Os originais de geração foram preservados no ambiente em `/workspace/generated
 
 ## Fotografias reais da equipe
 
-Os cartões atuais mostram iniciais e o aviso de fotografia em breve. Para incluir cada fotografia autorizada, use as propriedades `photo` e `photoAlt` do profissional em `src/data/content.ts`. O componente adapta o retrato ao enquadramento vertical 4:5, sem mudar a estrutura da página. Nomes completos, qualificações e inscrições na OAB continuam aguardando confirmação.
+Os quatro retratos foram fornecidos pelo usuário em um ZIP com os originais `Welson.png`, `Rommel Trevenzoli.png`, `Osvaldo Marques.png` e `Wesley Rezende.png`, todos com 1080 × 1080 pixels. Eles foram convertidos para WebP em variantes de 450 e 900 pixels de largura, sem geração ou alteração de identidade por IA. Os originais permanecem no diretório de anexos do ambiente, fora do pacote publicado.
 
-Prefira retratos individuais com iluminação semelhante, fundo neutro e espaço ao redor do rosto; a imagem do site pode ser preparada como WebP com 600 a 900 pixels de largura. Não inclua dados pessoais além dos autorizados para publicação.
+As fotografias aparecem tanto nos cartões quanto nas janelas individuais de perfil. O componente aplica o enquadramento vertical 4:5 por CSS e seleciona a variante adequada à tela. Os nomes exibidos seguem os arquivos enviados: Dr. Welson, Dr. Rommel Trevenzoli, Dr. Osvaldo Marques e Dr. Wesley Rezende. Nome completo do Dr. Welson, biografias, qualificações e inscrições na OAB continuam aguardando confirmação.
+
+Para trocar um retrato futuramente, mantenha a associação do arquivo ao profissional em `src/data/content.ts`, as variantes responsivas e uma descrição alternativa coerente. Não inclua dados pessoais além dos autorizados para publicação.
 
 ## Movimento
 

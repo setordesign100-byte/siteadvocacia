@@ -1,5 +1,5 @@
 // Conteúdo institucional fornecido pelo escritório na copy revisada da homepage.
-// Dados pessoais, contatos, qualificações e fotografias permanecem pendentes.
+// Contatos adicionais e qualificações permanecem pendentes; retratos e nomes vêm dos arquivos enviados pelo escritório.
 export const homepageCopy = {
   hero: {
     label: 'RTM ADVOCACIA | ATUAÇÃO JURÍDICA',
@@ -219,14 +219,31 @@ export type TeamMember = {
   initials: string;
   shade: string;
   photo?: string;
+  photoSmall?: string;
   photoAlt?: string;
 };
 
 export const team: TeamMember[] = [
-  { name: 'Dr. Welson', role: 'Advogado', initials: 'W', shade: 'stone' },
-  { name: 'Dr. Rommel', role: 'Advogado', initials: 'R', shade: 'blue' },
-  { name: 'Dr. Osvaldo', role: 'Advogado', initials: 'O', shade: 'dark' },
-  { name: 'Dr. Wesley', role: 'Advogado', initials: 'W', shade: 'sage' },
+  {
+    name: 'Dr. Welson', role: 'Advogado', initials: 'W', shade: 'stone',
+    photo: '/images/team-welson-900.webp', photoSmall: '/images/team-welson-450.webp',
+    photoAlt: 'Retrato de Dr. Welson, da equipe RTM Advocacia.',
+  },
+  {
+    name: 'Dr. Rommel Trevenzoli', role: 'Advogado', initials: 'R', shade: 'blue',
+    photo: '/images/team-rommel-900.webp', photoSmall: '/images/team-rommel-450.webp',
+    photoAlt: 'Retrato de Dr. Rommel Trevenzoli, da equipe RTM Advocacia.',
+  },
+  {
+    name: 'Dr. Osvaldo Marques', role: 'Advogado', initials: 'O', shade: 'dark',
+    photo: '/images/team-osvaldo-900.webp', photoSmall: '/images/team-osvaldo-450.webp',
+    photoAlt: 'Retrato de Dr. Osvaldo Marques, da equipe RTM Advocacia.',
+  },
+  {
+    name: 'Dr. Wesley Rezende', role: 'Advogado', initials: 'W', shade: 'sage',
+    photo: '/images/team-wesley-900.webp', photoSmall: '/images/team-wesley-450.webp',
+    photoAlt: 'Retrato de Dr. Wesley Rezende, da equipe RTM Advocacia.',
+  },
 ];
 
 // A copy fornece sugestões de publicações, não artigos prontos para publicação.

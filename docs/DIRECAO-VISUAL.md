@@ -40,9 +40,9 @@ As características atribuídas a Lefosse, Cescon Barrieu e TozziniFreire no ped
 
 React, TypeScript e Vite foram escolhidos porque não havia arquitetura existente. A aplicação é estática, sem backend, coleta de dados, analytics ou cookies da aplicação. O conteúdo é editável em `src/data/content.ts`; componentes, estilos e tokens ficam separados. Não foi criado formulário que simule envio, telefone fictício ou link de WhatsApp inválido.
 
-Fotos da equipe usam composições tipográficas explicitamente identificadas como retratos em preparação. Biografias e registros da OAB estão pendentes. As cinco pautas editoriais e suas sinopses vêm da copy revisada e estão identificadas como sugestões em preparação; não foram apresentadas como artigos completos ou publicações já realizadas. A aplicação permanece com `noindex, nofollow` até aprovação para publicação.
+As fotografias reais dos quatro profissionais foram incluídas a partir do ZIP enviado pelo usuário e aparecem nos cartões e nas janelas de perfil. Os nomes exibidos são Dr. Welson, Dr. Rommel Trevenzoli, Dr. Osvaldo Marques e Dr. Wesley Rezende. Nome completo do Dr. Welson, biografias, qualificações e registros da OAB estão pendentes. As cinco pautas editoriais e suas sinopses vêm da copy revisada e estão identificadas como sugestões em preparação; não foram apresentadas como artigos completos ou publicações já realizadas. A aplicação permanece com `noindex, nofollow` até aprovação para publicação.
 
-A revisão visual inclui 12 composições fotográficas ilustrativas diferentes, relacionadas individualmente ao banner, às áreas, ao escritório e às cinco pautas de publicação. Inventário, regularização imobiliária, contratos, cobertura de planos e responsabilidade médica recebem fotografias próprias. As imagens não representam a sede da RTM ou pessoas reais da equipe. Os cartões aceitam `photo` e `photoAlt` para receber os retratos autorizados posteriormente. Veja [IMAGENS.md](IMAGENS.md).
+A revisão visual inclui 12 composições fotográficas ilustrativas diferentes, relacionadas individualmente ao banner, às áreas, ao escritório e às cinco pautas de publicação. Inventário, regularização imobiliária, contratos, cobertura de planos e responsabilidade médica recebem fotografias próprias. Essas cenas editoriais não representam a sede da RTM ou pessoas reais da equipe. Separadamente, os quatro retratos enviados pelo usuário representam os profissionais identificados nos arquivos e foram otimizados para WebP em variantes de 450 e 900 px, sem edição de identidade por IA. O enquadramento dos cartões usa proporção 4:5 por CSS. Veja [IMAGENS.md](IMAGENS.md).
 
 O WhatsApp foi confirmado pelo usuário e configurado em `src/data/contact.ts`: +55 (31) 99196-7003. O botão flutuante e o CTA de contato abrem o mesmo destino em nova aba, com uma mensagem inicial que depende de envio pelo visitante. E-mail, endereço e horários permanecem pendentes. Não foi criado formulário com envio simulado ou coleta sem destino definido. O arquivo `ABRA-A-PREVIA.html` continua sendo exportado com todos os recursos incorporados para visualização local.
 
@@ -52,23 +52,23 @@ A compilação executa o TypeScript antes de gerar o build. A suíte Playwright 
 
 As imagens são WebP responsivas; as fontes são locais; não há scripts de terceiros no runtime. Core Web Vitals de campo dependem de hospedagem e tráfego reais e não foram medidos. Aprovação jurídica/editorial, conformidade efetiva com publicidade da OAB e política definitiva de dados dependem da revisão do escritório.
 
-### Resultado da validação desta entrega
+### Validação dos retratos — 05/11/2026
 
-- `npm ci --cache /workspace/.cache/npm`: instalação reproduzida com lockfile.
+Os resultados abaixo incluem os quatro retratos reais enviados pelo usuário, os nomes associados aos arquivos e o pacote atualizado para a hospedagem.
+
+- `npm ci --include=dev --cache /workspace/.cache/npm`: instalação reproduzida com lockfile, sem alteração nas dependências declaradas.
 - `npm run build`: checagem TypeScript e geração de produção aprovadas. O empacotador emite avisos sobre a diretiva `use client` da biblioteca de ícones; a aplicação é inteiramente cliente e os testes de runtime passaram.
-- `npm test`: 8 testes de construção de links de WhatsApp e 39 testes de navegador aprovados, sem falhas ou testes ignorados. Os testes de navegador são distribuídos em desktop, tablet e celular e cobrem banner integral com 800 px no desktop, fotografias responsivas sem repetição e associação de cada imagem ao seu tema, cartões e detalhes de áreas, equipe, pautas e filtros, perguntas frequentes, navegação, WhatsApp e movimento reduzido. A abertura externa de WhatsApp é interceptada nos testes, sem envio de mensagens. As verificações axe-core não encontraram violações das regras automatizadas selecionadas na página e nos diálogos de privacidade e termos, após o término das animações de entrada.
-- Verificação adicional em 320, 375, 390, 560, 700, 768, 800, 1024, 1050, 1440 e 1920 pixels: nenhum transbordamento horizontal.
-- Preferência de movimento reduzido: rolagem passa a `auto` conforme esperado.
-- Revisão do banner: altura de 800 px confirmada em 801, 1024, 1280, 1440, 1920 e 2560 px de largura. Em 320, 390 e 768 px, a altura acompanha o conteúdo. Título, ações e rodapé permanecem dentro do banner, sem transbordamento horizontal.
-- Servidor de desenvolvimento: resposta HTTP 200, imagem carregada e nenhum erro de execução no navegador durante a revisão.
-- Prévia independente: 12 imagens visíveis após rolagem, fontes, filtros e destino do WhatsApp validados com a rede desativada, sem erros e sem requisições externas ao carregar o documento.
-- Uma captura estática da revisão visual está em [previa-visual.jpg](previa-visual.jpg). Ela documenta a versão de 28/10/2026; não é um endereço de site publicado.
-- `install_script`, `start_skill` e domínios dos dez benchmarks salvos no rascunho do ambiente. Publicação e restauração em uma nova tarefa não foram realizadas nem validadas.
+- `npm test`: 8 testes de construção de links de WhatsApp e 39 testes de navegador aprovados, sem falhas ou testes ignorados. Os testes são distribuídos em desktop, tablet e celular. A verificação da equipe confirma a correspondência entre nomes e fotografias, as variantes responsivas, os retratos nos quatro perfis e o retorno do foco ao fechar cada janela. Também são cobertos banner de 800 px no desktop, 12 imagens editoriais distintas, áreas, pautas, filtros, perguntas frequentes, navegação, WhatsApp e movimento reduzido. A abertura externa de WhatsApp é interceptada, sem envio de mensagens.
+- As verificações axe-core não encontraram violações das regras automatizadas selecionadas na página e nos diálogos de privacidade e termos, após o término das animações de entrada.
+- Pacote `SITE-RTM-LOCAWEB.zip`: 58 arquivos, incluindo as oito variantes dos retratos, recursos de produção e licenças. Estrutura conferida com `index.html` na raiz, sem código-fonte ou prévia independente dentro do ZIP.
+- O conteúdo extraído do ZIP foi servido por HTTP e conferido em 320, 390, 768, 801 e 1440 px: 16 imagens carregadas, retratos alinhados em cada linha, nenhum transbordamento horizontal, recurso com falha ou erro de execução.
+- `npm run preview:export`: prévia independente atualizada e validada com a rede desativada. As 16 imagens da página e o retrato de um perfil carregaram como recursos incorporados, sem erro de execução.
+- Capturas atuais em [previa-equipe.jpg](previa-equipe.jpg) e [previa-visual.jpg](previa-visual.jpg). São registros estáticos da versão de 05/11/2026.
 
 ### Antes da publicação
 
 1. Confirmar nome institucional e qualificações/inscrição da sociedade, quando aplicáveis.
-2. Incluir nomes completos, registros da OAB, biografias e fotos autorizadas da equipe.
+2. Confirmar nome completo do Dr. Welson, qualificações, registros da OAB e biografias. Os quatro retratos autorizados já foram recebidos e incluídos.
 3. Confirmar e-mail, endereço e horários. O WhatsApp já está conectado ao número confirmado; o escritório deve conferir o recebimento no aplicativo.
 4. Substituir a assinatura provisória pelo arquivo oficial do logo.
 5. Revisar áreas, textos institucionais e conteúdos informativos com os responsáveis.

@@ -36,4 +36,6 @@ Para atualizar o arquivo de apresentação independente, execute `npm run previe
 
 ## Situação desta apresentação
 
-Não houve publicação na Locaweb nem alteração de DNS. Dados de contato, retratos e qualificações profissionais continuam pendentes. O site contém indicação de revisão e metadados para evitar indexação.
+Os retratos reais de Dr. Welson, Dr. Rommel Trevenzoli, Dr. Osvaldo Marques e Dr. Wesley Rezende foram incluídos a partir do ZIP enviado pelo usuário. O WhatsApp está configurado; nome completo do Dr. Welson, registros da OAB, biografias, e-mail, endereço e horários continuam pendentes. O site mantém a indicação de revisão e os metadados para evitar indexação.
+
+O repositório não altera a hospedagem ou o DNS automaticamente. Para enviar ou atualizar os arquivos na pasta `public_html` da Locaweb, use o pacote **SITE-RTM-LOCAWEB.zip** e siga [as instruções de publicação](COMO-PUBLICAR-NA-LOCAWEB.md).

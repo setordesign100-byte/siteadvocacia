@@ -1,6 +1,6 @@
 # RTM Advocacia
 
-Website institucional responsivo em React + TypeScript + Vite. Versão de apresentação baseada no briefing RTM, na copy revisada da homepage e na paleta fornecida. Inclui composição fotográfica editorial, áreas detalhadas, etapas de atendimento, filtros de pautas e perguntas frequentes. Contatos, registros da OAB, biografias e retratos aguardam validação antes da publicação.
+Website institucional responsivo em React + TypeScript + Vite. Versão de apresentação baseada no briefing RTM, na copy revisada da homepage e na paleta fornecida. Inclui composição fotográfica editorial, retratos reais dos quatro profissionais enviados pelo usuário, áreas detalhadas, etapas de atendimento, filtros de pautas e perguntas frequentes. O WhatsApp está configurado; e-mail, endereço, horários, registros da OAB, biografias e nome completo do Dr. Welson continuam pendentes.
 
 **Para apenas visualizar, veja [COMECE-AQUI.md](COMECE-AQUI.md) e abra `ABRA-A-PREVIA.html` após baixar e extrair o ZIP do repositório. Não requer instalação nem hospedagem.**
 
@@ -50,12 +50,13 @@ Gera `dist/rtm-preview.html` e `ABRA-A-PREVIA.html`, arquivos independentes com 
 - `src/components/HeroBanner.tsx`: banner fotográfico único em largura total, relacionado às especialidades.
 - `src/components/FloatingWhatsApp.tsx` e `src/data/contact.ts`: botão flutuante e número público confirmado do escritório. O link usa `wa.me` e abre uma mensagem pré-preenchida sem enviá-la automaticamente.
 - `src/tokens.css`, `src/styles.css` e `src/visual-refresh.css`: identidade visual, estilos compartilhados e composição fotográfica responsiva.
-- `public/images/`: arquitetura, ambiente de trabalho, patrimônio e saúde, gerados para o projeto e otimizados em WebP. Não são fotografias da sede ou da equipe.
+- `public/images/`: imagens editoriais ilustrativas geradas para o projeto e os quatro retratos reais enviados pelo usuário, todos otimizados em WebP. Os arquivos `team-{welson,rommel,osvaldo,wesley}-{450,900}.webp` são usados nos cartões e nos perfis da equipe; as demais imagens não representam a sede ou os profissionais da RTM.
 - `tests/site.spec.ts`: testes de comportamento e verificações axe-core.
 - `tests/whatsapp-links.test.mjs`: validação de números brasileiros e codificação segura da mensagem; executada pelo `npm test` antes do Playwright.
 - [Direção visual e limitações do benchmark](docs/DIRECAO-VISUAL.md): decisões, fontes, escopo e pendências.
 - [Imagens e preparação dos retratos](docs/IMAGENS.md): origem dos recursos e encaixe das fotos reais da equipe.
 - [Captura da versão visual](docs/previa-visual.jpg): imagem estática para revisão, sem instalação.
+- [Equipe com as fotos enviadas](docs/previa-equipe.jpg): retratos reais associados aos nomes fornecidos.
 
 Fontes Manrope e Cormorant Garamond distribuídas por Fontsource sob OFL; os arquivos de licença acompanham os pacotes instalados. As fontes e imagens são carregadas do próprio site. Não há analytics, formulários, cookies da aplicação ou armazenamento local. O aviso de privacidade é preliminar e deve ser ajustado ao funcionamento real da hospedagem.
 

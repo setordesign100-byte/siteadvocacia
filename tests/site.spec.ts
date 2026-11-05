@@ -152,18 +152,38 @@ test('practice areas expand, show the revised services and open their detail dia
   }
 });
 
-test('the four team members have photo placeholders and accessible individual profiles', async ({ page }) => {
+test('the four team members show their supplied portraits and accessible individual profiles', async ({ page }) => {
   const cards = page.locator('.team-card');
   await expect(cards).toHaveCount(4);
-  await expect(page.locator('.team-portrait img')).toHaveCount(0);
-  await expect(page.locator('.portrait-note')).toHaveText(Array(4).fill('FOTOGRAFIA EM BREVE'));
-  for (const [index, name] of ['Dr. Welson', 'Dr. Rommel', 'Dr. Osvaldo', 'Dr. Wesley'].entries()) {
-    await cards.nth(index).click();
-    await expect(page.getByRole('dialog').getByRole('heading', { level: 2 })).toHaveText(name);
-    await expect(page.getByRole('dialog')).toContainText('registro na OAB');
+  await expect(page.locator('.team-portrait img')).toHaveCount(4);
+  await expect(page.locator('.portrait-note')).toHaveCount(0);
+  const members = [
+    ['Dr. Welson', 'welson'],
+    ['Dr. Rommel Trevenzoli', 'rommel'],
+    ['Dr. Osvaldo Marques', 'osvaldo'],
+    ['Dr. Wesley Rezende', 'wesley'],
+  ] as const;
+  for (const [index, [name, slug]] of members.entries()) {
+    const card = cards.nth(index);
+    const portrait = card.locator('img');
+    await card.scrollIntoViewIfNeeded();
+    await expect(card.getByRole('heading', { level: 3 })).toHaveText(name);
+    await expect(portrait).toHaveAttribute('src', `/images/team-${slug}-900.webp`);
+    await expect(portrait).toHaveAttribute('srcset', new RegExp(`team-${slug}-450\\.webp 450w,.*team-${slug}-900\\.webp 900w`));
+    expect(await portrait.getAttribute('alt')).toContain(name);
+    await expect.poll(() => portrait.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth > 0)).toBe(true);
+    await card.click();
+    const dialog = page.getByRole('dialog');
+    await expect(dialog.getByRole('heading', { level: 2 })).toHaveText(name);
+    await expect(dialog).toContainText('registro na OAB');
+    const profilePortrait = dialog.locator('img');
+    await expect(profilePortrait).toHaveCount(1);
+    await expect(profilePortrait).toHaveAttribute('src', `/images/team-${slug}-900.webp`);
+    expect(await profilePortrait.getAttribute('alt')).toContain(name);
+    await expect.poll(() => profilePortrait.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth > 0)).toBe(true);
     await page.keyboard.press('Escape');
     await expect(page.getByRole('dialog')).toHaveCount(0);
-    await expect(cards.nth(index)).toBeFocused();
+    await expect(card).toBeFocused();
   }
 });
 
