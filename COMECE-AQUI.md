@@ -2,9 +2,9 @@
 
 ## Quero publicar no blog
 
-Com o pacote atualizado instalado na Locaweb, abra **`/painel/`** no domínio do escritório. No primeiro acesso, use o código de ativação fornecido separadamente na conversa e escolha seu usuário e sua senha. Depois, use **Novo artigo** para preencher título, imagem e texto, conferir a prévia e salvar um rascunho ou publicar.
+Depois de enviar o novo pacote à Locaweb, abra **[https://rtmadvocacia.com.br/painel/](https://rtmadvocacia.com.br/painel/)**. Entre com o usuário principal **`admin.rtm`** e a senha fornecida separadamente nesta conversa. A tela oferece apenas login. O administrador principal libera outros editores em **Gerenciar acessos**; visitantes não criam contas. Depois, use **Novo artigo** para preencher título, imagem e texto, conferir a prévia e salvar um rascunho ou publicar.
 
-Veja [o passo a passo do blog](COMO-USAR-O-BLOG.md) e [como enviar o novo pacote à Locaweb](COMO-PUBLICAR-NA-LOCAWEB.md). O blog público fica em **`/blog/`**. Ele precisa da hospedagem com PHP habilitado; as publicações ficam salvas no servidor.
+Veja [o passo a passo do blog](COMO-USAR-O-BLOG.md) e [como enviar o novo pacote à Locaweb](COMO-PUBLICAR-NA-LOCAWEB.md). O blog público fica em **[https://rtmadvocacia.com.br/blog/](https://rtmadvocacia.com.br/blog/)** após a instalação do pacote. Ele precisa da hospedagem com PHP habilitado; as publicações ficam salvas no servidor.
 
 ## Só quero ver a primeira versão
 

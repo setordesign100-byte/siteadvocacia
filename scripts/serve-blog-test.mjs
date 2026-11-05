@@ -1,12 +1,19 @@
-import { spawn } from 'node:child_process';
-import { createHash } from 'node:crypto';
+import { spawn, execFileSync } from 'node:child_process';
 import { cpSync, existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
-// This code and account are isolated test fixtures, never deployment credentials.
-const activationCode = 'RTM-BLOG-INTEGRATION-TEST-ACTIVATION-ONLY';
+// These credentials belong only to isolated tests, never to a delivery ZIP.
+const primaryUser = 'admin.rtm';
+const primaryPassword = 'UmaSenhaParaTestes-2026!';
 const php = process.env.RTM_PHP_BIN || 'php';
+const primaryHash = execFileSync(php, ['-r', 'echo password_hash(stream_get_contents(STDIN), PASSWORD_DEFAULT);'], {
+  input: primaryPassword,
+  encoding: 'utf8',
+}).trim();
+if (!primaryHash.startsWith('$2') && !primaryHash.startsWith('$argon2')) {
+  throw new Error('Não foi possível preparar a conta de teste do painel.');
+}
 const build = resolve('dist');
 if (!existsSync(join(build, 'api', 'blog.php'))) {
   throw new Error('Gere o site com npm run build antes de testar o blog.');
@@ -65,7 +72,9 @@ const child = spawn(php, ['-d', `session.save_path=${sessions}`, '-d', `sys_temp
   env: {
     ...process.env,
     RTM_BLOG_DATA_DIR: privateData,
-    RTM_BLOG_SETUP_HASH: createHash('sha256').update(activationCode).digest('hex'),
+    RTM_BLOG_PRIMARY_USER: primaryUser,
+    RTM_BLOG_PRIMARY_HASH: primaryHash,
+    RTM_BLOG_PROVISION_ID: 'rtm-restricted-access-integration-tests-only',
   },
 });
 showPhpErrors(child.stdout);

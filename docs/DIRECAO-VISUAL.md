@@ -2,7 +2,7 @@
 
 ## Base do projeto
 
-O repositório estava vazio. O briefing RTM.docx informa: divulgação institucional; atuação em Direito Civil, do Consumidor e Médico; inventários, regularização de imóveis e contratos; defesa de profissionais da saúde e questões de consumidores com planos de saúde. A equipe indicada é composta por Dr. Welson, Dr. Rommel, Dr. Osvaldo e Dr. Wesley. A mensagem é de atendimento personalizado e próximo, com uma presença moderna. O domínio informado no documento é `rtm.advocacia.com.br`, ainda sem validação operacional.
+O repositório estava vazio. O briefing RTM.docx informa: divulgação institucional; atuação em Direito Civil, do Consumidor e Médico; inventários, regularização de imóveis e contratos; defesa de profissionais da saúde e questões de consumidores com planos de saúde. A equipe indicada é composta por Dr. Welson, Dr. Rommel, Dr. Osvaldo e Dr. Wesley. A mensagem é de atendimento personalizado e próximo, com uma presença moderna. O domínio inicialmente informado no documento era `rtm.advocacia.com.br`. Em 05/11/2026, o responsável confirmou o domínio de publicação **`rtmadvocacia.com.br`**; a disponibilidade e a configuração operacional da hospedagem não foram confirmadas por esse dado.
 
 Os documentos foram utilizados como fontes de informações do escritório. Suas perguntas, respostas e sugestões de componentes não foram tratadas como instruções operacionais independentes. O usuário autorizou o desenvolvimento, a ampliação visual e o envio posterior dos contatos, qualificações e retratos. A copy revisada da homepage foi incorporada em 23/10/2026.
 
@@ -38,7 +38,7 @@ As características atribuídas a Lefosse, Cescon Barrieu e TozziniFreire no ped
 
 ## Etapa 3 — implementação
 
-React, TypeScript e Vite foram escolhidos porque não havia arquitetura existente. O front-end institucional é compilado para arquivos estáticos; a ampliação do blog acrescenta uma API PHP com persistência na hospedagem. O conteúdo institucional continua editável em `src/data/content.ts`; componentes, estilos e tokens ficam separados. A área pública não utiliza analytics, cookies de publicidade ou armazenamento local pela aplicação. O painel recebe os artigos e imagens da equipe e usa um cookie necessário para manter a autenticação. Não foi criado formulário que simule envio, telefone fictício ou link de WhatsApp inválido.
+React, TypeScript e Vite foram escolhidos porque não havia arquitetura existente. O front-end institucional é compilado para arquivos estáticos; a ampliação do blog acrescenta uma API PHP com persistência na hospedagem. O conteúdo institucional continua editável em `src/data/content.ts`; componentes, estilos e tokens ficam separados. A área pública não utiliza analytics, cookies de publicidade ou armazenamento local pela aplicação. O painel recebe artigos, imagens e os dados dos acessos autorizados; as senhas são armazenadas como hashes e um cookie necessário mantém a autenticação. Não foi criado formulário que simule envio, telefone fictício ou link de WhatsApp inválido.
 
 As fotografias reais dos quatro profissionais foram incluídas a partir do ZIP enviado pelo usuário e aparecem nos cartões e nas janelas de perfil. Os nomes exibidos são Dr. Welson, Dr. Rommel Trevenzoli, Dr. Osvaldo Marques e Dr. Wesley Rezende. Nome completo do Dr. Welson, biografias, qualificações e registros da OAB estão pendentes. As cinco pautas editoriais e suas sinopses vêm da copy revisada e estão identificadas como sugestões em preparação; não foram apresentadas como artigos completos ou publicações já realizadas. A aplicação permanece com `noindex, nofollow` até aprovação para publicação.
 
@@ -52,7 +52,11 @@ O blog público fica em `/blog/`, com artigos individuais em `/blog/?artigo=slug
 
 Os textos e dados da conta ficam em arquivos JSON na pasta privada `rtm-blog-private`, fora de `public_html`; as imagens enviadas ficam em `public_html/uploads/blog/`. Essas pastas são criadas em tempo de execução, exigem permissão de gravação e devem ser preservadas em atualizações. Rascunhos e administração exigem autenticação. A API usa `password_hash`, sessão autenticada, proteção CSRF, validação dos uploads e gravação com bloqueio e substituição atômica. JPEG, PNG e WebP são aceitos até 5 MB e 6000 pixels em cada lado; HTML e SVG não fazem parte dos formatos aceitos.
 
-O primeiro acesso exige um código aleatório de ativação fornecido separadamente ao responsável. O empacotador mantém o código original fora do repositório e do ZIP; somente seu verificador SHA-256 entra na configuração PHP de instalação. Após a criação da conta, a ativação inicial fica desabilitada. O responsável define seu usuário e sua senha no painel; nenhuma senha de administrador padrão é distribuída.
+A página de acesso restrito oferece somente login. A conta principal `admin.rtm` é provisionada a partir da configuração confiável do pacote, que contém somente o usuário, o hash da senha e a identificação de provisionamento. A senha original é gerada fora do repositório e do ZIP e fornecida separadamente ao responsável. A versão anterior com código de ativação é substituída; o endpoint de cadastro inicial fica fechado, inclusive para o código anterior. O primeiro visitante não pode escolher a conta principal.
+
+Somente o administrador principal pode listar, criar ou revogar contas de editor em **Gerenciar acessos**. Editores podem administrar as publicações, mas a API rejeita ações de administração de contas para esse perfil. A conta principal não pode ser revogada por ela mesma. Todos os usuários autenticados podem alterar a própria senha; a troca de senha e a revogação invalidam as outras sessões correspondentes. A API verifica o perfil e a versão da credencial em cada ação protegida.
+
+A mesma identificação de provisionamento preserva senhas alteradas no painel em atualizações normais. Uma nova identificação aplica a nova credencial principal de forma intencional. A migração da conta única anterior mantém artigos e imagens e substitui as credenciais antigas pelo login principal entregue ao responsável. Os acessos destinados à hospedagem são [rtmadvocacia.com.br/painel/](https://rtmadvocacia.com.br/painel/) e [rtmadvocacia.com.br/blog/](https://rtmadvocacia.com.br/blog/), após o envio do pacote atualizado.
 
 Essa ampliação usa PHP 8.1 ou mais recente em sua implementação; para a hospedagem recomenda-se PHP 8.2 ou mais recente, com Fileinfo e sessões habilitados. A compatibilidade e as permissões no plano real da Locaweb ainda precisam ser verificadas. Não há banco de dados externo. Os arquivos locais de prévia não substituem a API nem publicam artigos. Consulte [COMO-USAR-O-BLOG.md](../COMO-USAR-O-BLOG.md).
 
@@ -75,7 +79,9 @@ Os resultados abaixo registram a etapa de inclusão dos quatro retratos, anterio
 - `npm run preview:export`: prévia independente atualizada e validada com a rede desativada. As 16 imagens da página e o retrato de um perfil carregaram como recursos incorporados, sem erro de execução.
 - Capturas atuais em [previa-equipe.jpg](previa-equipe.jpg) e [previa-visual.jpg](previa-visual.jpg). São registros estáticos da versão de 05/11/2026.
 
-### Validação do blog — 05/11/2026
+### Validação anterior do blog — 05/11/2026
+
+Os resultados desta seção pertencem à versão anterior com ativação por código. Não comprovam a ampliação de perfis, o provisionamento do login principal ou a revogação de acessos; os resultados específicos da versão restrita devem ser registrados após suas verificações.
 
 - `npm run preview:export`: TypeScript, build do front-end, páginas `/blog/` e `/painel/`, cópia da API PHP e prévia independente aprovados.
 - `npm test`: 8 testes de WhatsApp e 39 testes de navegador da página institucional aprovados. `RTM_PHP_BIN=/workspace/.cache/rtm-php/php npm run test:blog`: 4 testes adicionais aprovados em desktop e celular, usando PHP real e dados isolados. Total: 51 testes aprovados.
@@ -85,6 +91,17 @@ Os resultados abaixo registram a etapa de inclusão dos quatro retratos, anterio
 - Verificações axe-core nas telas do blog e do painel, em desktop e celular: nenhuma violação nas regras automatizadas WCAG selecionadas. Sem transbordamento horizontal; a página inicial também foi conferida em 320, 390, 801, 1051, 1100, 1200 e 1440 px.
 - A prévia independente manteve as 16 imagens institucionais carregadas com a rede desativada. Blog e publicações reais continuam dependendo do PHP.
 - Capturas em [previa-blog.jpg](previa-blog.jpg) e [previa-painel-blog.jpg](previa-painel-blog.jpg). A captura do painel usa uma conta de exemplo em ambiente isolado, sem distribuir uma conta pronta para a hospedagem.
+
+### Validação do acesso restrito — 05/11/2026
+
+- `npm run preview:export`: checagem TypeScript, compilação, páginas e API aprovadas. A conta principal é provisionada pelo pacote; a página pública contém somente login e o antigo endpoint `setup` retorna 404.
+- `npm test`: 8 testes de WhatsApp e 39 testes da página institucional aprovados. `RTM_PHP_BIN=/workspace/.cache/rtm-php/php npm run test:blog`: 6 testes adicionais aprovados em desktop e celular. Total: 53 testes aprovados.
+- As verificações incluem publicação completa, rejeição de cadastro público, autorização do administrador, criação de editor, bloqueio de promoção ou criação de contas por editores, revogação de sessões já abertas, proteção do acesso principal e troca de senha com invalidação das outras sessões.
+- O ZIP final foi extraído e servido com PHP em uma cópia isolada, usando o usuário e a senha principal correspondentes à sua configuração. O login funcionou sem criar conta pela interface. Um arquivo legado de conta, os artigos e uma imagem anterior permaneceram intactos; somente o novo principal foi provisionado. Nenhuma conta ou publicação de teste integra o ZIP.
+- Login, painel, gerenciamento de acessos e troca de senha foram revisados em 1440, 390 e 320 px: nenhuma violação nas regras automatizadas WCAG selecionadas pelo axe-core, nenhum erro de execução e nenhum transbordamento horizontal.
+- PHP 8.4: análise de sintaxe dos três arquivos distribuídos aprovada. A senha original ficou fora do repositório e do ZIP; o pacote contém somente seu hash. O código de ativação anterior não permite criar usuários nesta versão.
+- Capturas em [previa-acesso-restrito.jpg](previa-acesso-restrito.jpg), [previa-acessos-autorizados.jpg](previa-acessos-autorizados.jpg) e [previa-painel-blog.jpg](previa-painel-blog.jpg). São registros de uma instalação isolada para revisão.
+- O domínio foi confirmado pelo responsável. A consulta externa a `rtmadvocacia.com.br` foi bloqueada pelo proxy deste ambiente (403 no túnel); isso não é um diagnóstico do site. Não houve envio de arquivos à Locaweb, alteração de DNS ou validação do painel em produção.
 
 ### Antes da publicação
 

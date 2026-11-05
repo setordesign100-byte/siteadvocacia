@@ -1,16 +1,35 @@
 # Como publicar no blog da RTM
 
-O blog fica em **`https://seu-dominio.com.br/blog/`**. Para escrever e administrar os artigos, entre em **`https://seu-dominio.com.br/painel/`**, trocando `seu-dominio.com.br` pelo endereço do escritório.
+Após instalar o pacote atualizado na Locaweb, use estes endereços:
 
-## Primeiro acesso
+- **Acesso restrito:** [https://rtmadvocacia.com.br/painel/](https://rtmadvocacia.com.br/painel/)
+- **Blog público:** [https://rtmadvocacia.com.br/blog/](https://rtmadvocacia.com.br/blog/)
 
-1. Envie o novo pacote do site para a Locaweb seguindo [as instruções de publicação](COMO-PUBLICAR-NA-LOCAWEB.md).
-2. Abra o endereço terminado em **`/painel/`**.
-3. Em **Crie seu acesso**, cole o **código de ativação fornecido separadamente nesta conversa**.
-4. Escolha seu **usuário** e uma **senha com pelo menos 12 caracteres**. Repita a senha na confirmação.
-5. Clique em **Criar meu acesso**.
+O domínio foi informado pelo responsável pelo escritório. A disponibilidade dessas páginas depende do envio do novo ZIP e da configuração de PHP e HTTPS na hospedagem; a atualização da Locaweb não é feita automaticamente por este repositório.
 
-Guarde o usuário e a senha escolhidos. Nos próximos acessos, entre com esses dados. O código de ativação serve para criar o primeiro acesso; a criação inicial fica desabilitada quando a conta existe.
+## Entrar com o login principal
+
+1. Envie o novo pacote completo para a Locaweb seguindo [as instruções de publicação](COMO-PUBLICAR-NA-LOCAWEB.md).
+2. Abra [o acesso restrito](https://rtmadvocacia.com.br/painel/).
+3. Informe o usuário **`admin.rtm`** e a **senha principal fornecida separadamente nesta conversa**.
+4. Clique em **Entrar no painel**.
+
+A tela de entrada oferece apenas login. O acesso principal vem configurado no pacote; visitantes não escolhem o primeiro usuário nem criam contas por essa tela. O código de ativação da versão anterior não é usado nesta versão.
+
+## Autorizar outra pessoa
+
+Somente o administrador principal pode criar e revogar acessos.
+
+1. Entre com o login principal e clique em **Gerenciar acessos**.
+2. Em **Acessos autorizados**, preencha **Usuário do novo acesso**, **Senha do novo acesso** e **Confirmar senha do novo acesso**.
+3. Use uma senha com pelo menos **12 caracteres** e clique em **Criar acesso de editor**.
+4. Entregue o usuário e a senha à pessoa autorizada. Ela entra pelo mesmo endereço do painel.
+
+O editor pode preparar e administrar as publicações do blog, mas não pode criar ou revogar contas. Para retirar um acesso, use **Revogar acesso de...** na lista e confirme em **Confirmar revogação**. A revogação impede novas ações daquele usuário, inclusive em uma sessão que já estava aberta. O administrador principal não pode revogar o próprio acesso.
+
+## Alterar sua senha
+
+Entre no painel, escolha **Alterar minha senha**, preencha **Senha atual**, **Nova senha** e **Confirmar nova senha** e clique em **Salvar nova senha**. Cada usuário pode alterar a própria senha. A nova senha substitui a anterior e encerra as outras sessões desse acesso.
 
 ## Criar uma publicação
 
@@ -40,10 +59,12 @@ O painel precisa funcionar na hospedagem com **PHP 8.1 ou mais recente**, **sess
 
 Se aparecer uma mensagem sobre PHP, peça ao suporte para confirmar a versão e esses módulos. Se aparecer uma mensagem sobre gravação, a hospedagem precisa permitir que o PHP crie a pasta privada **`rtm-blog-private`**, ao lado de `public_html`, e a pasta de imagens **`public_html/uploads/blog/`**. O sistema cria essas pastas quando necessário.
 
-Se a tela disser que a ativação ainda não foi incluída, envie o **ZIP de hospedagem atualizado**, que contém a configuração de ativação desta entrega. O código recebido na conversa deve corresponder a esse pacote.
+Se a tela informar que a conta principal não foi configurada, envie o **ZIP de hospedagem atualizado completo**, incluindo a pasta `api`. A senha fornecida nesta conversa corresponde à configuração principal incluída nesse pacote.
 
 O arquivo `ABRA-A-PREVIA.html` mostra uma apresentação local. O acesso e a publicação reais do blog usam a hospedagem com PHP; abrir esse HTML no computador não publica um artigo.
 
-## Manter os artigos nas atualizações
+## Manter os artigos e os acessos nas atualizações
 
-Ao instalar uma nova versão do site, preserve **`public_html/uploads/blog/`** e a pasta **`rtm-blog-private`** fora da raiz pública. Elas guardam as imagens enviadas, os artigos e os dados de acesso. Atualize os arquivos do novo ZIP sobre os existentes, sem substituir essas pastas por cópias vazias.
+Ao instalar uma nova versão do site, preserve **`public_html/uploads/blog/`** e a pasta **`rtm-blog-private`** fora da raiz pública. Elas guardam as imagens enviadas, os artigos e os acessos autorizados. Atualize os arquivos do novo ZIP sobre os existentes, sem substituir essas pastas por cópias vazias.
+
+Nas atualizações normais, as senhas alteradas no painel continuam valendo. Se for entregue uma nova credencial principal para substituir a anterior, use os novos dados. Ao passar da versão anterior com código de ativação para esta versão, use o novo login principal entregue separadamente; preserve os artigos e as imagens já existentes.

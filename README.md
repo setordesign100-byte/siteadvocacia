@@ -4,7 +4,7 @@ Website institucional responsivo em React + TypeScript + Vite, com blog público
 
 **Para apenas visualizar, veja [COMECE-AQUI.md](COMECE-AQUI.md) e abra `ABRA-A-PREVIA.html` após baixar e extrair o ZIP do repositório. Não requer instalação nem hospedagem.**
 
-**Para escrever artigos, veja [COMO-USAR-O-BLOG.md](COMO-USAR-O-BLOG.md).** O blog fica em `/blog/` e o painel em `/painel/`. Os artigos, rascunhos e dados de acesso ficam na hospedagem; a publicação real precisa de PHP e não funciona apenas abrindo a prévia HTML.
+**Para escrever artigos, veja [COMO-USAR-O-BLOG.md](COMO-USAR-O-BLOG.md).** Após instalar o pacote atualizado, o blog público fica em [rtmadvocacia.com.br/blog/](https://rtmadvocacia.com.br/blog/) e o acesso restrito em [rtmadvocacia.com.br/painel/](https://rtmadvocacia.com.br/painel/). Os artigos, rascunhos e dados de acesso ficam na hospedagem; a publicação real precisa de PHP e não funciona apenas abrindo a prévia HTML.
 
 ## Desenvolvimento
 
@@ -43,13 +43,13 @@ Para gerar o pacote de entrega no ambiente de desenvolvimento:
 npm run package:hosting
 ```
 
-Esse comando executa o build e o empacotador `scripts/package-hosting.py`, que utiliza Python 3 e sua biblioteca padrão. O ZIP inclui as páginas `/blog/` e `/painel/`, os arquivos PHP em `api/` e as licenças. O empacotador guarda o código de ativação fora do Git em `../.rtm-blog-install/siteadvocacia.activation-code`, com acesso restrito, e inclui somente seu verificador SHA-256 em `api/blog-install.php`. O código original é entregue separadamente ao responsável pelo site. Um build simples contém a configuração de exemplo sem ativação; use o pacote de entrega para instalar o painel.
+Esse comando executa o build e o empacotador `scripts/package-hosting.py`. O ZIP inclui as páginas `/blog/` e `/painel/`, os arquivos PHP em `api/` e as licenças. A configuração `api/blog-install.php` contém o usuário principal `admin.rtm`, seu hash de senha e a identificação de provisionamento. A senha original é gerada fora do Git e do ZIP, em `../.rtm-blog-install/siteadvocacia.admin-credentials`, com permissão restrita ao responsável, e é entregue separadamente na conversa. Um build simples contém a configuração de exemplo sem credenciais principais; use o pacote de entrega para instalar o painel. As ferramentas de empacotamento são usadas no ambiente de desenvolvimento, não na hospedagem.
 
-No primeiro acesso ao painel, o responsável informa o código de ativação e define usuário e senha. A API guarda a senha com `password_hash`, usa sessão autenticada e proteção CSRF para alterações e salva os dados JSON fora da raiz pública, com bloqueio e substituição atômica dos arquivos. Leitura de artigos publicados não cria sessão. Rascunhos e administração exigem autenticação.
+A página de entrada oferece apenas login, sem cadastro público. A conta principal é provisionada automaticamente a partir da configuração confiável do pacote; o primeiro visitante não escolhe credenciais. Somente o administrador principal cria e revoga contas de editor em **Gerenciar acessos**. Editores podem administrar publicações, mas a API bloqueia a administração de contas para esse perfil. Todos podem alterar a própria senha. A API guarda senhas com `password_hash`, verifica papel e versão das credenciais em cada ação protegida, usa proteção CSRF e salva os dados JSON fora da raiz pública com bloqueio e substituição atômica. A revogação e a troca de senha invalidam sessões antigas. Leitura de artigos publicados não cria sessão.
 
 Para testar a API localmente, sirva a pasta `dist` com PHP, em vez do servidor estático do Vite. O comando `npm run test:blog` executa a suíte específica do blog; consulte sua configuração e os requisitos locais antes de executá-lo. A disponibilidade de um executável PHP no ambiente de testes não confirma a configuração da hospedagem do usuário.
 
-Ao atualizar a aplicação, preserve `uploads/blog/` na raiz pública e `rtm-blog-private` fora dela. Os dados criados na hospedagem ficam fora do pacote e não devem ser substituídos por arquivos vazios.
+Ao atualizar a aplicação, preserve `uploads/blog/` na raiz pública e `rtm-blog-private` fora dela. Os dados criados na hospedagem ficam fora do pacote e não devem ser substituídos por arquivos vazios. A mesma identificação de provisionamento preserva senhas alteradas no painel; uma nova identificação aplica a nova credencial principal. A migração da versão anterior preserva artigos e imagens e substitui o fluxo de ativação pelo login principal restrito.
 
 ## Prévia sem servidor
 
@@ -63,9 +63,9 @@ Gera `dist/rtm-preview.html` e `ABRA-A-PREVIA.html`, arquivos independentes com 
 
 - `src/App.tsx`: estrutura da página e navegação.
 - `src/blog/`: listagem pública, artigo, painel, prévia e cliente da API do blog.
-- `server/blog/`: API PHP, autenticação, persistência e configuração de ativação de exemplo.
+- `server/blog/`: API PHP, autenticação, persistência, perfis de acesso e configuração principal de exemplo.
 - `scripts/build-pages.mjs`: páginas de entrada do blog e do painel e cópia da API para o build.
-- `scripts/package-hosting.py`: pacote de entrega e configuração de ativação sem incluir o código original.
+- `scripts/package-hosting.py`: pacote de entrega e provisionamento principal sem incluir a senha original.
 - `src/data/content.ts`: áreas, profissionais e textos introdutórios.
 - `src/components/Modal.tsx`: janela acessível compartilhada.
 - `src/components/EditorialImage.tsx` e `src/data/images.ts`: imagens locais responsivas.
@@ -80,10 +80,11 @@ Gera `dist/rtm-preview.html` e `ABRA-A-PREVIA.html`, arquivos independentes com 
 - [Direção visual e limitações do benchmark](docs/DIRECAO-VISUAL.md): decisões, fontes, escopo e pendências.
 - [Como usar o blog](COMO-USAR-O-BLOG.md): primeiro acesso e rotina de publicação.
 - [Tela do blog](docs/previa-blog.jpg) e [painel de publicações](docs/previa-painel-blog.jpg): capturas da revisão em ambiente de testes.
+- [Entrada restrita](docs/previa-acesso-restrito.jpg) e [acessos autorizados](docs/previa-acessos-autorizados.jpg): login e gerenciamento exclusivo do administrador principal.
 - [Imagens e preparação dos retratos](docs/IMAGENS.md): origem dos recursos e encaixe das fotos reais da equipe.
 - [Captura da versão visual](docs/previa-visual.jpg): imagem estática para revisão, sem instalação.
 - [Equipe com as fotos enviadas](docs/previa-equipe.jpg): retratos reais associados aos nomes fornecidos.
 
-Fontes Manrope e Cormorant Garamond distribuídas por Fontsource sob OFL; os arquivos de licença acompanham os pacotes instalados. As fontes e imagens são carregadas do próprio site. A navegação pública não utiliza analytics, cookies de publicidade ou armazenamento local pela aplicação. O painel usa um cookie necessário de sessão para autenticação e recebe os textos e imagens enviados pela equipe. O aviso de privacidade é preliminar e deve refletir também a configuração real da hospedagem.
+Fontes Manrope e Cormorant Garamond distribuídas por Fontsource sob OFL; os arquivos de licença acompanham os pacotes instalados. As fontes e imagens são carregadas do próprio site. A navegação pública não utiliza analytics, cookies de publicidade ou armazenamento local pela aplicação. O painel usa um cookie necessário de sessão para autenticação e recebe textos, imagens e os dados dos acessos autorizados. As senhas são armazenadas como hashes. O aviso de privacidade é preliminar e deve refletir também a configuração real da hospedagem.
 
 **Não publicar esta apresentação como versão definitiva:** a página contém aviso de revisão e `noindex, nofollow`. Consulte a lista de pendências na documentação de direção visual. Os domínios de benchmark estão pendentes de aplicação da configuração de rede; nenhuma análise visual desses sites foi simulada.

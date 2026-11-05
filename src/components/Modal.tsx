@@ -11,7 +11,7 @@ export function Modal({ title, children, onClose }: { title: string; children: R
     document.body.style.overflow = 'hidden';
     return () => { dialog.close(); document.body.style.overflow = oldOverflow; previous?.focus(); };
   }, []);
-  return <dialog ref={ref} className="modal" aria-labelledby="modal-title" onCancel={onClose} onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
+  return <dialog ref={ref} className="modal" aria-labelledby="modal-title" onCancel={event => { event.preventDefault(); onClose(); }} onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
     <div className="modal-inner">
       <button className="icon-button modal-close" onClick={onClose} aria-label="Fechar janela"><X /></button>
       <span className="eyebrow">RTM ADVOCACIA</span>

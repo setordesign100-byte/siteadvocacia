@@ -29,4 +29,5 @@ export type BlogSession = {
   setupConfigured: boolean;
   csrfToken: string;
   username?: string;
+  role?: 'admin' | 'editor';
 };

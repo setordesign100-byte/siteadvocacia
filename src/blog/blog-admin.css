@@ -26,6 +26,26 @@
 .blog-admin-top { display: flex; justify-content: space-between; align-items: start; gap: 30px; padding-bottom: 44px; }
 .blog-admin-top h1 { font-size: clamp(44px, 4.4vw, 66px); margin: 18px 0 20px; }
 .blog-admin-top p { font-size: 13px; color: #52636b; max-width: 600px; }
+.blog-admin-account-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex-shrink: 0; }
+.blog-admin-account-role { display: block; color: #52666f; font-size: 10px; line-height: 1.6; margin-bottom: 7px; }
+.blog-admin-access-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.blog-admin-account-actions .blog-admin-quiet { font-size: 11px; min-height: 36px; padding-block: 6px; }
+.blog-admin-access-panel > p, .blog-admin-access-panel form > p { font-size: 12px; color: #52636b; line-height: 1.85; }
+.blog-admin-access-panel h3 { font-family: var(--serif); font-weight: 400; font-size: 28px; line-height: 1.2; margin-bottom: 17px; }
+.blog-admin-access-panel section { margin-block: 25px 30px; }
+.blog-admin-access-panel form { padding-top: 26px; border-top: 1px solid var(--line); }
+.blog-admin-access-panel form > .blog-admin-field-help { margin: -10px 0 22px; font-size: 10px; }
+.blog-admin-access-panel form > h3 + .blog-admin-field-help { margin-top: 0; }
+.blog-admin-access-panel form > p:first-child { margin-top: 0; }
+.blog-admin-access-panel .blog-admin-field input { font-size: 13px; }
+.blog-admin-users-list { list-style: none; margin: 0; padding: 0; }
+.blog-admin-users-list > li { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; border-bottom: 1px solid var(--line); padding-block: 16px; }
+.blog-admin-users-list strong { display: block; font-size: 13px; font-weight: 500; color: #243e49; overflow-wrap: anywhere; }
+.blog-admin-users-list li > div > span { display: block; font-size: 10px; color: #52666f; margin-top: 5px; }
+.blog-admin-user-revoke { max-width: 260px; flex-shrink: 0; }
+.blog-admin-user-revoke > p { margin-top: 0; font-size: 11px; line-height: 1.8; }
+.blog-admin-user-revoke > div { display: flex; flex-wrap: wrap; gap: 8px; }
+.blog-admin-user-revoke button { font-size: 10px; padding-block: 6px; min-height: 35px; }
 .blog-admin-layout { display: grid; grid-template-columns: 270px minmax(0, 1fr); gap: 38px; align-items: start; border-top: 1px solid var(--line); padding-top: 32px; }
 .blog-admin-library { position: sticky; top: 110px; min-width: 0; }
 .blog-admin-library-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
@@ -137,6 +157,14 @@
   .blog-admin-top h1 { font-size: 42px; }
   .blog-admin-top p { font-size: 12px; }
   .blog-admin-top > .blog-admin-quiet { padding-top: 0; min-height: 32px; }
+  .blog-admin-top { flex-direction: column; }
+  .blog-admin-account-actions { width: 100%; flex-direction: row; align-items: center; justify-content: flex-start; flex-wrap: wrap; gap: 5px 16px; }
+  .blog-admin-account-role { width: 100%; margin-bottom: 4px; }
+  .blog-admin-access-actions { flex-direction: row; align-items: center; justify-content: flex-start; flex-wrap: wrap; gap: 5px 16px; }
+  .blog-admin-account-actions .blog-admin-quiet { min-height: 40px; }
+  .blog-admin-users-list > li { flex-direction: column; gap: 8px; }
+  .blog-admin-user-revoke { max-width: 100%; }
+  .blog-admin-access-panel form > .blog-admin-button { width: 100%; }
   .blog-admin-library-heading h2 { font-size: 29px; }
   .blog-admin-post-list { grid-template-columns: 1fr; }
   .blog-admin-workspace { padding: 23px 18px; }

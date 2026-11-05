@@ -8,3 +8,5 @@ test-results/
 rtm-blog-private/
 public/uploads/
 *.activation-code
+*.admin-credentials
+__pycache__/

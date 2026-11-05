@@ -119,16 +119,156 @@ function rtm_write_json(string $filename, array $value): void
     }
 }
 
-function rtm_read_account(): ?array
+function rtm_primary_configuration(): array
 {
-    $account = rtm_read_json('account.json', null);
-    if ($account === null) {
+    static $configuration = null;
+    if (is_array($configuration)) {
+        return $configuration;
+    }
+    $environment = [getenv('RTM_BLOG_PRIMARY_USER'), getenv('RTM_BLOG_PRIMARY_HASH'), getenv('RTM_BLOG_PROVISION_ID')];
+    if (array_filter($environment, fn(mixed $value): bool => $value !== false) !== []) {
+        $candidate = ['username' => $environment[0], 'passwordHash' => $environment[1], 'provisioningId' => $environment[2]];
+    } else {
+        $file = __DIR__ . '/blog-install.php';
+        $installed = is_file($file) ? require $file : [];
+        $candidate = is_array($installed) ? ($installed['primary_account'] ?? null) : null;
+    }
+    if (!is_array($candidate) || !is_string($candidate['username'] ?? null)
+        || !preg_match('/^[a-zA-Z0-9][a-zA-Z0-9._-]{2,63}$/D', $candidate['username'])
+        || !is_string($candidate['passwordHash'] ?? null)
+        || (password_get_info($candidate['passwordHash'])['algoName'] ?? 'unknown') === 'unknown'
+        || !is_string($candidate['provisioningId'] ?? null)
+        || !preg_match('/^[a-zA-Z0-9._-]{8,128}$/D', $candidate['provisioningId'])) {
+        rtm_fail(503, 'O acesso principal precisa estar incluído no pacote atualizado do site.');
+    }
+    $configuration = $candidate;
+    return $configuration;
+}
+
+function rtm_read_user_state(): ?array
+{
+    $state = rtm_read_json('users.json', null);
+    if ($state === null) {
         return null;
     }
-    if (!is_array($account) || !is_string($account['username'] ?? null) || !is_string($account['passwordHash'] ?? null)) {
-        rtm_fail(500, 'A configuração de acesso precisa de verificação.');
+    if (!is_array($state) || !is_string($state['appliedProvisioningId'] ?? null)
+        || !is_array($state['users'] ?? null) || !array_is_list($state['users'])) {
+        rtm_fail(500, 'A configuração dos acessos precisa de verificação.');
     }
-    return $account;
+    $ids = [];
+    $names = [];
+    $administrators = 0;
+    foreach ($state['users'] as $user) {
+        if (!is_array($user) || !is_string($user['id'] ?? null) || !preg_match('/^[a-f0-9]{32}$/D', $user['id'])
+            || !is_string($user['username'] ?? null) || !preg_match('/^[a-zA-Z0-9][a-zA-Z0-9._-]{2,63}$/D', $user['username'])
+            || !is_string($user['passwordHash'] ?? null) || (password_get_info($user['passwordHash'])['algoName'] ?? 'unknown') === 'unknown'
+            || !in_array($user['role'] ?? '', ['admin', 'editor'], true)
+            || !is_string($user['credentialVersion'] ?? null) || !preg_match('/^[a-f0-9]{32}$/D', $user['credentialVersion'])
+            || !is_string($user['createdAt'] ?? null) || !is_string($user['updatedAt'] ?? null)
+            || isset($ids[$user['id']]) || isset($names[strtolower($user['username'])])) {
+            rtm_fail(500, 'A configuração dos acessos precisa de verificação.');
+        }
+        $ids[$user['id']] = true;
+        $names[strtolower($user['username'])] = true;
+        if ($user['role'] === 'admin') {
+            $administrators++;
+        }
+    }
+    if ($administrators !== 1) {
+        rtm_fail(500, 'A configuração do acesso principal precisa de verificação.');
+    }
+    return $state;
+}
+
+function rtm_initialize_accounts(): void
+{
+    static $initialized = false;
+    if ($initialized) {
+        return;
+    }
+    $configuration = rtm_primary_configuration();
+    rtm_with_lock(function () use ($configuration): void {
+        $state = rtm_read_user_state();
+        if ($state !== null && hash_equals($state['appliedProvisioningId'], $configuration['provisioningId'])) {
+            return;
+        }
+        $users = $state['users'] ?? [];
+        $principalIndex = null;
+        foreach ($users as $index => $user) {
+            if ($user['role'] === 'admin') {
+                $principalIndex = $index;
+            } elseif (strtolower($user['username']) === strtolower($configuration['username'])) {
+                rtm_fail(503, 'O usuário principal configurado coincide com outro acesso. Confira o pacote de instalação.');
+            }
+        }
+        $existing = $principalIndex === null ? null : $users[$principalIndex];
+        $now = rtm_now();
+        $principal = [
+            'id' => $existing['id'] ?? bin2hex(random_bytes(16)),
+            'username' => $configuration['username'],
+            'passwordHash' => $configuration['passwordHash'],
+            'role' => 'admin',
+            'credentialVersion' => bin2hex(random_bytes(16)),
+            'createdAt' => $existing['createdAt'] ?? $now,
+            'updatedAt' => $now,
+        ];
+        if ($principalIndex === null) {
+            $users[] = $principal;
+        } else {
+            $users[$principalIndex] = $principal;
+        }
+        // Legacy account.json is no longer an authentication source. Posts and
+        // uploads are preserved; only the trusted delivery provisions the owner.
+        rtm_write_json('users.json', ['appliedProvisioningId' => $configuration['provisioningId'], 'users' => array_values($users)]);
+    });
+    $initialized = true;
+}
+
+function rtm_user_summary(array $user): array
+{
+    return ['id' => $user['id'], 'username' => $user['username'], 'role' => $user['role'], 'createdAt' => $user['createdAt']];
+}
+
+function rtm_validate_username(array $input): string
+{
+    $username = rtm_text($input, 'username', 64);
+    if (!preg_match('/^[a-zA-Z0-9][a-zA-Z0-9._-]{2,63}$/D', $username)) {
+        rtm_fail(422, 'Escolha um usuário de 3 a 64 caracteres, usando letras, números, ponto, hífen ou sublinhado.');
+    }
+    return $username;
+}
+
+function rtm_validate_new_password(array $input, string $key = 'password'): string
+{
+    $password = $input[$key] ?? null;
+    if (!is_string($password) || !preg_match('//u', $password) || rtm_length($password) < 12 || strlen($password) > 72 || str_contains($password, "\0")) {
+        rtm_fail(422, 'Escolha uma senha com pelo menos 12 caracteres e no máximo 72 bytes.');
+    }
+    return $password;
+}
+
+function rtm_hash_password(string $password): string
+{
+    $hash = password_hash($password, PASSWORD_DEFAULT);
+    if ($hash === false) {
+        rtm_fail(500, 'Não foi possível proteger a senha. Tente novamente.');
+    }
+    return $hash;
+}
+
+// Used inside the write lock, so access revocation and password changes cannot
+// race with account-management writes. Never rely only on a client-sent role.
+function rtm_check_actor(array $state, array $actor, bool $administrator = false): array
+{
+    foreach ($state['users'] as $user) {
+        if (hash_equals($user['id'], $actor['id']) && hash_equals($user['credentialVersion'], $actor['credentialVersion'])) {
+            if ($administrator && $user['role'] !== 'admin') {
+                rtm_fail(403, 'Somente o acesso principal pode administrar os acessos.');
+            }
+            return $user;
+        }
+    }
+    rtm_fail(401, 'Este acesso foi alterado ou revogado. Entre novamente para continuar.');
 }
 
 function rtm_read_posts(): array
@@ -143,17 +283,6 @@ function rtm_read_posts(): array
         }
     }
     return $posts;
-}
-
-function rtm_activation_hash(): string
-{
-    $hash = getenv('RTM_BLOG_SETUP_HASH');
-    if (!is_string($hash) || $hash === '') {
-        $file = __DIR__ . '/blog-install.php';
-        $configuration = is_file($file) ? require $file : [];
-        $hash = is_array($configuration) ? ($configuration['activation_hash'] ?? '') : '';
-    }
-    return is_string($hash) && preg_match('/^[a-f0-9]{64}$/D', $hash) ? $hash : '';
 }
 
 function rtm_start_session(): void
@@ -177,21 +306,39 @@ function rtm_start_session(): void
     }
 }
 
+function rtm_authenticated_user(): ?array
+{
+    rtm_initialize_accounts();
+    if (!is_string($_SESSION['userId'] ?? null) || !is_string($_SESSION['credentialVersion'] ?? null)) {
+        return null;
+    }
+    return rtm_with_lock(function (): ?array {
+        $state = rtm_read_user_state();
+        foreach ($state['users'] as $user) {
+            if (hash_equals($user['id'], $_SESSION['userId']) && hash_equals($user['credentialVersion'], $_SESSION['credentialVersion'])) {
+                return $user;
+            }
+        }
+        unset($_SESSION['userId'], $_SESSION['credentialVersion']);
+        return null;
+    }, LOCK_SH);
+}
+
 function rtm_session_data(): array
 {
-    $account = rtm_with_lock(fn(): ?array => rtm_read_account(), LOCK_SH);
-    $authenticated = $account !== null && isset($_SESSION['username']) && is_string($_SESSION['username']) && hash_equals($account['username'], $_SESSION['username']);
-    $data = ['authenticated' => $authenticated, 'setupRequired' => $account === null, 'setupConfigured' => rtm_activation_hash() !== '', 'csrfToken' => $_SESSION['csrf']];
-    if ($authenticated) {
-        $data['username'] = $account['username'];
+    $user = rtm_authenticated_user();
+    $data = ['authenticated' => $user !== null, 'setupRequired' => false, 'setupConfigured' => true, 'csrfToken' => $_SESSION['csrf']];
+    if ($user !== null) {
+        $data['username'] = $user['username'];
+        $data['role'] = $user['role'];
     }
     return $data;
 }
 
-function rtm_authenticate(string $username): void
+function rtm_authenticate(array $user): void
 {
     session_regenerate_id(true);
-    $_SESSION = ['username' => $username, 'csrf' => bin2hex(random_bytes(32)), 'lastActivity' => time()];
+    $_SESSION = ['userId' => $user['id'], 'credentialVersion' => $user['credentialVersion'], 'csrf' => bin2hex(random_bytes(32)), 'lastActivity' => time()];
 }
 
 function rtm_require_csrf(): void
@@ -202,11 +349,22 @@ function rtm_require_csrf(): void
     }
 }
 
-function rtm_require_auth(): void
+function rtm_require_auth(): array
 {
-    if (!rtm_session_data()['authenticated']) {
+    $user = rtm_authenticated_user();
+    if ($user === null) {
         rtm_fail(401, 'Entre no painel para continuar.');
     }
+    return $user;
+}
+
+function rtm_require_admin(): array
+{
+    $user = rtm_require_auth();
+    if ($user['role'] !== 'admin') {
+        rtm_fail(403, 'Somente o acesso principal pode administrar os acessos.');
+    }
+    return $user;
 }
 
 function rtm_json_input(): array

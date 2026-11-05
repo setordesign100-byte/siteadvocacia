@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
 
-// The delivery script creates blog-install.php with a SHA-256 verifier for a
-// random activation code delivered separately. Never add the raw code here.
-return ['activation_hash' => ''];
+// The delivery script supplies only the protected password verifier and a stable
+// provisioning identifier. Never put a raw password or a public signup code here.
+return ['primary_account' => ['username' => '', 'passwordHash' => '', 'provisioningId' => '']];

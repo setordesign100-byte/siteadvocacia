@@ -14,8 +14,8 @@ try {
         rtm_fail(400, 'A operação solicitada é inválida.');
     }
     $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-    $readActions = ['posts', 'post', 'session', 'manage'];
-    $writeActions = ['setup', 'login', 'logout', 'save', 'upload', 'delete'];
+    $readActions = ['posts', 'post', 'session', 'manage', 'users'];
+    $writeActions = ['login', 'logout', 'save', 'upload', 'delete', 'create-user', 'revoke-user', 'change-password'];
     if (!in_array($action, array_merge($readActions, $writeActions), true)) {
         rtm_fail(404, 'A operação solicitada não foi encontrada.');
     }
@@ -53,67 +53,44 @@ try {
     if ($method === 'POST') {
         rtm_require_csrf();
     }
-    if ($action === 'setup') {
-        $input = rtm_json_input();
-        $username = rtm_text($input, 'username', 64);
-        if (!preg_match('/^[a-zA-Z0-9][a-zA-Z0-9._-]{2,63}$/D', $username)) {
-            rtm_fail(422, 'Escolha um usuário de 3 a 64 caracteres, usando letras, números, ponto, hífen ou sublinhado.');
-        }
-        $password = $input['password'] ?? null;
-        if (!is_string($password) || !preg_match('//u', $password) || rtm_length($password) < 12 || strlen($password) > 72 || str_contains($password, "\0")) {
-            rtm_fail(422, 'Escolha uma senha com pelo menos 12 caracteres e no máximo 72 bytes.');
-        }
-        $activationCode = $input['activationCode'] ?? '';
-        if (!is_string($activationCode) || strlen($activationCode) > 256) {
-            rtm_fail(422, 'Informe o código de ativação recebido com o pacote do site.');
-        }
-        rtm_with_lock(function () use ($username, $password, $activationCode): void {
-            if (rtm_read_account() !== null) {
-                rtm_fail(409, 'O painel já foi ativado. Entre com seu usuário e senha.');
-            }
-            $hash = rtm_activation_hash();
-            if ($hash === '') {
-                rtm_fail(503, 'O pacote precisa incluir a configuração de ativação do painel.');
-            }
-            rtm_check_throttle();
-            if (!hash_equals($hash, hash('sha256', trim($activationCode)))) {
-                rtm_record_failed_attempt();
-                rtm_fail(403, 'Código de ativação inválido. Confira o código recebido com o pacote.');
-            }
-            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-            if ($passwordHash === false) {
-                rtm_fail(500, 'Não foi possível proteger a senha. Tente novamente.');
-            }
-            rtm_write_json('account.json', ['username' => $username, 'passwordHash' => $passwordHash, 'createdAt' => rtm_now()]);
-            rtm_clear_failed_attempts();
-        });
-        rtm_authenticate($username);
-        rtm_json(rtm_session_data(), 201);
-    }
     if ($action === 'login') {
+        rtm_initialize_accounts();
         $input = rtm_json_input();
         $username = rtm_text($input, 'username', 64);
         $password = $input['password'] ?? '';
-        if (!is_string($password) || strlen($password) > 200 || str_contains($password, "\0")) {
+        if (!is_string($password) || strlen($password) > 72 || str_contains($password, "\0")) {
             rtm_fail(401, 'Usuário ou senha incorretos.');
         }
-        $authenticatedUser = rtm_with_lock(function () use ($username, $password): string {
-            $account = rtm_read_account();
-            if ($account === null) {
-                rtm_fail(409, 'Ative o painel antes de entrar.');
-            }
+        $authenticatedUser = rtm_with_lock(function () use ($username, $password): array {
+            $state = rtm_read_user_state();
             rtm_check_throttle();
-            $validPassword = password_verify($password, $account['passwordHash']);
-            if (!$validPassword || !hash_equals($account['username'], $username)) {
+            $candidate = null;
+            $comparisonHash = '';
+            foreach ($state['users'] as $user) {
+                if ($user['role'] === 'admin') {
+                    $comparisonHash = $user['passwordHash'];
+                }
+                if (strtolower($user['username']) === strtolower($username)) {
+                    $candidate = $user;
+                }
+            }
+            $validPassword = password_verify($password, $candidate['passwordHash'] ?? $comparisonHash);
+            if (!$validPassword || $candidate === null) {
                 rtm_record_failed_attempt();
                 rtm_fail(401, 'Usuário ou senha incorretos.');
             }
-            if (password_needs_rehash($account['passwordHash'], PASSWORD_DEFAULT)) {
-                $account['passwordHash'] = password_hash($password, PASSWORD_DEFAULT);
-                rtm_write_json('account.json', $account);
+            if (password_needs_rehash($candidate['passwordHash'], PASSWORD_DEFAULT)) {
+                $candidate['passwordHash'] = rtm_hash_password($password);
+                $candidate['updatedAt'] = rtm_now();
+                foreach ($state['users'] as $index => $user) {
+                    if ($user['id'] === $candidate['id']) {
+                        $state['users'][$index] = $candidate;
+                    }
+                }
+                rtm_write_json('users.json', $state);
             }
             rtm_clear_failed_attempts();
-            return $account['username'];
+            return $candidate;
         });
         rtm_authenticate($authenticatedUser);
         rtm_json(rtm_session_data());
@@ -125,11 +102,98 @@ try {
         rtm_json(rtm_session_data());
     }
 
-    rtm_require_auth();
+    $actor = rtm_require_auth();
     if ($action === 'manage') {
         $posts = rtm_with_lock(fn(): array => rtm_read_posts(), LOCK_SH);
         usort($posts, fn(array $a, array $b): int => strcmp($b['updatedAt'], $a['updatedAt']));
         rtm_json(['posts' => $posts]);
+    }
+    if ($action === 'users') {
+        rtm_require_admin();
+        $users = rtm_with_lock(fn(): array => array_map('rtm_user_summary', rtm_read_user_state()['users']), LOCK_SH);
+        rtm_json(['users' => $users]);
+    }
+    if ($action === 'create-user') {
+        rtm_require_admin();
+        $input = rtm_json_input();
+        $username = rtm_validate_username($input);
+        $password = rtm_validate_new_password($input);
+        if (array_key_exists('role', $input) && $input['role'] !== 'editor') {
+            rtm_fail(403, 'Novos acessos podem receber somente a permissão de publicação.');
+        }
+        $created = rtm_with_lock(function () use ($input, $username, $password, $actor): array {
+            $state = rtm_read_user_state();
+            rtm_check_actor($state, $actor, true);
+            foreach ($state['users'] as $user) {
+                if (strtolower($user['username']) === strtolower($username)) {
+                    rtm_fail(409, 'Esse nome de usuário já está em uso. Escolha outro.');
+                }
+            }
+            if (count($state['users']) >= 101) {
+                rtm_fail(422, 'O limite de acessos autorizados foi atingido.');
+            }
+            $now = rtm_now();
+            $user = ['id' => bin2hex(random_bytes(16)), 'username' => $username, 'passwordHash' => rtm_hash_password($password), 'role' => 'editor', 'credentialVersion' => bin2hex(random_bytes(16)), 'createdAt' => $now, 'updatedAt' => $now];
+            $state['users'][] = $user;
+            rtm_write_json('users.json', $state);
+            return $user;
+        });
+        rtm_json(['user' => rtm_user_summary($created)], 201);
+    }
+    if ($action === 'revoke-user') {
+        rtm_require_admin();
+        $input = rtm_json_input();
+        $id = $input['id'] ?? '';
+        if (!is_string($id) || !preg_match('/^[a-f0-9]{32}$/D', $id)) {
+            rtm_fail(422, 'A identificação do acesso é inválida.');
+        }
+        rtm_with_lock(function () use ($id, $actor): void {
+            $state = rtm_read_user_state();
+            rtm_check_actor($state, $actor, true);
+            foreach ($state['users'] as $index => $user) {
+                if ($user['id'] === $id) {
+                    if ($user['role'] === 'admin') {
+                        rtm_fail(422, 'O acesso principal não pode ser removido.');
+                    }
+                    unset($state['users'][$index]);
+                    $state['users'] = array_values($state['users']);
+                    rtm_write_json('users.json', $state);
+                    return;
+                }
+            }
+            rtm_fail(404, 'O acesso não foi encontrado.');
+        });
+        rtm_json(['ok' => true]);
+    }
+    if ($action === 'change-password') {
+        $input = rtm_json_input();
+        $currentPassword = $input['currentPassword'] ?? '';
+        if (!is_string($currentPassword) || strlen($currentPassword) > 72 || str_contains($currentPassword, "\0")) {
+            rtm_fail(422, 'Confira sua senha atual.');
+        }
+        $newPassword = rtm_validate_new_password($input, 'newPassword');
+        $changed = rtm_with_lock(function () use ($currentPassword, $newPassword, $actor): array {
+            $state = rtm_read_user_state();
+            $current = rtm_check_actor($state, $actor);
+            rtm_check_throttle();
+            if (!password_verify($currentPassword, $current['passwordHash'])) {
+                rtm_record_failed_attempt();
+                rtm_fail(422, 'A senha atual está incorreta.');
+            }
+            $current['passwordHash'] = rtm_hash_password($newPassword);
+            $current['credentialVersion'] = bin2hex(random_bytes(16));
+            $current['updatedAt'] = rtm_now();
+            foreach ($state['users'] as $index => $user) {
+                if ($user['id'] === $current['id']) {
+                    $state['users'][$index] = $current;
+                }
+            }
+            rtm_write_json('users.json', $state);
+            rtm_clear_failed_attempts();
+            return $current;
+        });
+        rtm_authenticate($changed);
+        rtm_json(rtm_session_data());
     }
     if ($action === 'upload') {
         rtm_json(['image' => rtm_upload()], 201);
