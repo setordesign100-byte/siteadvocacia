@@ -5,3 +5,6 @@ dist/
 !.env.example
 *.local
 test-results/
+rtm-blog-private/
+public/uploads/
+*.activation-code

@@ -1,14 +1,17 @@
 # Publicar a RTM na Locaweb
 
-Baixe o arquivo **SITE-RTM-LOCAWEB.zip** atualizado deste repositório. Ele contém o site compilado, com os retratos reais dos quatro profissionais, as imagens editoriais, os estilos, as fontes e o WhatsApp configurado.
+Baixe o arquivo **SITE-RTM-LOCAWEB.zip** atualizado deste repositório. Ele contém o site, o blog e o painel para criar publicações, além dos retratos da equipe, das imagens, das fontes e do WhatsApp configurado.
+
+O blog precisa de **PHP 8.1 ou mais recente**, **sessões** e **Fileinfo** habilitados na hospedagem; recomenda-se **PHP 8.2 ou mais recente**. A disponibilidade desses recursos no seu plano da Locaweb ainda precisa ser conferida. O PHP também deve permitir gravação nas pastas de dados e imagens indicadas abaixo.
 
 ## Enviar os arquivos
 
 1. No Windows, clique com o botão direito no ZIP e escolha **Extrair tudo**.
 2. Acesse o gerenciador de arquivos ou o FTP da sua hospedagem Locaweb e abra a pasta **public_html**, identificada nesta hospedagem como a pasta pública do domínio.
-3. Envie **todo o conteúdo extraído do novo ZIP** para `public_html`. Ao atualizar o site existente, confirme a substituição dos arquivos de mesmo nome. O arquivo `index.html` deve ficar diretamente em `public_html`, junto com as pastas `assets`, `images`, `licenses` e o arquivo `favicon.svg`.
-4. Não crie uma pasta `SITE-RTM` dentro de `public_html` para guardar o site. O `index.html` precisa ficar na raiz pública, conforme a estrutura abaixo.
+3. Envie **todo o conteúdo extraído do novo ZIP** para `public_html`. Ao atualizar o site existente, confirme a substituição dos arquivos de mesmo nome. Deixe `index.html` diretamente em `public_html`, com as pastas `assets`, `images`, `licenses`, `blog`, `painel`, `api` e o arquivo `favicon.svg`.
+4. Confira a estrutura abaixo. Os arquivos ficam diretamente em `public_html`, sem uma pasta `SITE-RTM` intermediária.
 5. Acesse o seu domínio pelo navegador. Se ainda aparecer a versão anterior, recarregue com **Ctrl + F5** no Windows. Domínio e HTTPS são configurados no painel da hospedagem.
+6. Abra **`/painel/`** no seu domínio e crie seu acesso com o código de ativação fornecido separadamente nesta conversa. Veja [como usar o blog](COMO-USAR-O-BLOG.md).
 
 ```text
 public_html/
@@ -16,17 +19,31 @@ public_html/
 ├── favicon.svg
 ├── assets/
 ├── images/
-└── licenses/
+├── licenses/
+├── blog/
+├── painel/
+└── api/
 ```
 
 Se o painel permitir extrair ZIPs, você também pode enviar o arquivo e extraí-lo diretamente na pasta pública. Confirme que ele não criou uma pasta adicional entre a raiz do domínio e o `index.html`.
 
-O pacote é para a **raiz do domínio**, por exemplo `https://seu-dominio.com.br/`. Os recursos usam caminhos a partir da raiz; para hospedar em uma subpasta, como `/site/`, é necessário ajustar o projeto e gerar outro pacote. Não é necessário instalar Node, React ou banco de dados no servidor. A página usa navegação por âncoras e não exige regras de reescrita.
+O pacote é para a **raiz do domínio**, por exemplo `https://seu-dominio.com.br/`. Os recursos usam caminhos a partir da raiz; para hospedar em uma subpasta, como `/site/`, é necessário ajustar o projeto e gerar outro pacote. O blog público fica em **`/blog/`**, os artigos têm endereços como **`/blog/?artigo=titulo-do-artigo`** e o painel fica em **`/painel/`**. As páginas usam arquivos de índice e não exigem regras de reescrita. Não é necessário instalar Node, Python ou banco de dados na hospedagem.
+
+## Preservar as publicações nas atualizações
+
+O blog cria duas pastas para seus dados:
+
+- **`public_html/uploads/blog/`**: imagens enviadas pelo painel.
+- **`rtm-blog-private`**, ao lado de `public_html`: artigos, dados da conta e arquivos de controle. Essa pasta fica fora da área pública.
+
+**Preserve essas duas pastas ao atualizar o site.** Os arquivos do novo ZIP podem substituir os arquivos de mesmo nome da aplicação, mas as imagens enviadas e os dados privados devem continuar na hospedagem. Essas pastas de conteúdo não fazem parte do ZIP e são criadas pelo PHP quando necessário.
+
+Se o painel informar que não pode criar ou gravar essas pastas, peça ao suporte da Locaweb para conferir as permissões do PHP. Evite mover a pasta privada para dentro de `public_html`.
 
 ## Conteúdo desta entrega
 
-Este ZIP contém a versão atual de revisão. Permanecem os avisos de apresentação, os perfis e as pautas em preparação, os dados profissionais pendentes e os documentos de privacidade e termos preliminares. O WhatsApp confirmado é **(31) 99196-7003**.
+Este ZIP contém a versão atual de revisão, agora com publicação real pelo painel. Permanecem os avisos de apresentação, os dados profissionais pendentes e os documentos de privacidade e termos preliminares. As cinco pautas sugeridas da página inicial continuam em preparação; os artigos criados e publicados pelo painel são conteúdos separados. O WhatsApp confirmado é **(31) 99196-7003**.
 
 O metadado `noindex, nofollow` permanece ativo: a página pode ser acessada pelo domínio, mas solicita aos mecanismos de busca que não a indexem. Ele poderá ser retirado na finalização das informações institucionais. As fotografias editoriais são ilustrativas. Os retratos reais de Dr. Welson, Dr. Rommel Trevenzoli, Dr. Osvaldo Marques e Dr. Wesley Rezende aparecem nos cartões e nos perfis da equipe. Os registros da OAB, as biografias e o nome completo do Dr. Welson continuam pendentes.
 
-O ZIP contém os arquivos estáticos gerados por `npm run build` e as licenças das dependências distribuídas. O código-fonte, as ferramentas de desenvolvimento e o arquivo de prévia independente ficam fora do pacote. Gere um novo pacote após alterações no site; este arquivo não se atualiza automaticamente.
+O ZIP contém o front-end compilado, a API PHP, a configuração de ativação e as licenças das dependências distribuídas. A configuração contém apenas o verificador do código de ativação; o código original é fornecido separadamente. O código-fonte de desenvolvimento e a prévia independente ficam fora do pacote. As alterações na estrutura do site exigem um novo pacote; os artigos são administrados pelo painel e ficam salvos na hospedagem.

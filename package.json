@@ -6,9 +6,11 @@
     "dev": "vite --host 0.0.0.0",
     "start:local": "node scripts/start-local.mjs",
     "typecheck": "tsc --noEmit",
-    "build": "npm run typecheck && vite build",
+    "build": "npm run typecheck && vite build && node scripts/build-pages.mjs",
     "preview": "vite preview --host 0.0.0.0",
     "test": "node --test tests/whatsapp-links.test.mjs && playwright test",
+    "test:blog": "playwright test --config playwright.blog.config.ts",
+    "package:hosting": "npm run build && python3 scripts/package-hosting.py",
     "preview:export": "npm run build && node scripts/export-preview.mjs"
   },
   "repository": {

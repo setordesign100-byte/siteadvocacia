@@ -1,5 +1,11 @@
 # Como visualizar o site RTM
 
+## Quero publicar no blog
+
+Com o pacote atualizado instalado na Locaweb, abra **`/painel/`** no domínio do escritório. No primeiro acesso, use o código de ativação fornecido separadamente na conversa e escolha seu usuário e sua senha. Depois, use **Novo artigo** para preencher título, imagem e texto, conferir a prévia e salvar um rascunho ou publicar.
+
+Veja [o passo a passo do blog](COMO-USAR-O-BLOG.md) e [como enviar o novo pacote à Locaweb](COMO-PUBLICAR-NA-LOCAWEB.md). O blog público fica em **`/blog/`**. Ele precisa da hospedagem com PHP habilitado; as publicações ficam salvas no servidor.
+
 ## Só quero ver a primeira versão
 
 Não precisa instalar Node.js ou publicar o site.
@@ -9,7 +15,7 @@ Não precisa instalar Node.js ou publicar o site.
 3. Abra a pasta extraída.
 4. Dê dois cliques no arquivo **ABRA-A-PREVIA.html**.
 
-O site abre no seu navegador. Esse arquivo inclui as imagens, fontes e interações e funciona sem internet. É uma cópia da versão preparada, não um servidor com atualização automática.
+O site institucional abre no seu navegador. Esse arquivo inclui as imagens, fontes e interações locais. A consulta e a publicação reais do blog dependem da API PHP na hospedagem; o HTML independente não salva artigos nem representa um servidor com atualização automática.
 
 O endereço `localhost` não serve para abrir essa cópia. Use o arquivo HTML.
 
@@ -38,4 +44,4 @@ Para atualizar o arquivo de apresentação independente, execute `npm run previe
 
 Os retratos reais de Dr. Welson, Dr. Rommel Trevenzoli, Dr. Osvaldo Marques e Dr. Wesley Rezende foram incluídos a partir do ZIP enviado pelo usuário. O WhatsApp está configurado; nome completo do Dr. Welson, registros da OAB, biografias, e-mail, endereço e horários continuam pendentes. O site mantém a indicação de revisão e os metadados para evitar indexação.
 
-O repositório não altera a hospedagem ou o DNS automaticamente. Para enviar ou atualizar os arquivos na pasta `public_html` da Locaweb, use o pacote **SITE-RTM-LOCAWEB.zip** e siga [as instruções de publicação](COMO-PUBLICAR-NA-LOCAWEB.md).
+O repositório não altera a hospedagem ou o DNS automaticamente. Para enviar ou atualizar os arquivos na pasta `public_html` da Locaweb, use o pacote **SITE-RTM-LOCAWEB.zip** e siga [as instruções de publicação](COMO-PUBLICAR-NA-LOCAWEB.md). Nas atualizações, preserve as imagens de `public_html/uploads/blog/` e a pasta de dados `rtm-blog-private` fora da raiz pública.

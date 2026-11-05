@@ -7,7 +7,14 @@ import '@fontsource/cormorant-garamond/latin-400.css';
 import '@fontsource/cormorant-garamond/latin-400-italic.css';
 import '@fontsource/cormorant-garamond/latin-500.css';
 import App from './App';
+import BlogPage from './blog/BlogPage';
+import BlogAdmin from './blog/BlogAdmin';
 import './styles.css';
 import './visual-refresh.css';
+import './blog/blog-public.css';
+import './blog/blog-admin.css';
+import './blog/home-blog.css';
 
-ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>);
+const path = window.location.pathname.replace(/\/+$/, '');
+const Page = path === '/painel' || path === '/painel/index.html' ? BlogAdmin : path === '/blog' || path === '/blog/index.html' ? BlogPage : App;
+ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><Page /></React.StrictMode>);

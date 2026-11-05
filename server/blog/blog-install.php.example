@@ -1,0 +1,6 @@
+<?php
+declare(strict_types=1);
+
+// The delivery script creates blog-install.php with a SHA-256 verifier for a
+// random activation code delivered separately. Never add the raw code here.
+return ['activation_hash' => ''];
