@@ -116,6 +116,12 @@ O manual em [PDF](../entregas/MANUAL-PAINEL-RTM.pdf) inclui os dados de acesso f
 
 O PDF final tem 12 páginas A4, sumário clicável e prints com passos numerados. Todas as páginas foram renderizadas e revisadas visualmente; a abertura com a senha correta, a rejeição de senha incorreta, os links e a criptografia AES-256 foram verificados. O pacote de hospedagem não inclui o manual nem suas credenciais em texto puro.
 
+### Marca na apresentação da equipe — 06/11/2026
+
+A marca RTM já utilizada no cabeçalho e no rodapé também aparece na abertura da seção da equipe, entre linhas discretas. A aplicação permanece visível em celulares e telas maiores, com espaçamento adaptado à largura da tela. A fotografia coletiva apresentada na conversa ainda depende do envio como arquivo acessível para sua inclusão; ela não foi substituída por uma imagem gerada ou por outra fotografia.
+
+O build e a prévia independente foram atualizados, e quatro testes existentes em celular passaram: navegação e largura da página, equipe e perfis, movimento reduzido e verificações automatizadas de acessibilidade. A aplicação da marca foi revisada em capturas de celular e desktop; o ZIP de hospedagem contém a alteração.
+
 ### Antes da publicação
 
 1. Confirmar nome institucional e qualificações/inscrição da sociedade, quando aplicáveis.
