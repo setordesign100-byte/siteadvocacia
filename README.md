@@ -1,6 +1,6 @@
 # RTM Advocacia
 
-Website institucional responsivo em React + TypeScript + Vite, com blog público e painel de publicações apoiados por uma API PHP. Inclui composição fotográfica editorial, retratos reais dos quatro profissionais, áreas detalhadas, etapas de atendimento, filtros de pautas e perguntas frequentes. O WhatsApp está configurado; e-mail, endereço, horários, registros da OAB, biografias e nome completo do Dr. Welson continuam pendentes.
+Website institucional responsivo em React + TypeScript + Vite, com blog público e painel de publicações apoiados por uma API PHP. Inclui composição fotográfica editorial, retratos reais dos quatro profissionais, áreas detalhadas, etapas de atendimento, filtros de pautas e perguntas frequentes. O WhatsApp está configurado; e-mail, endereço, horários, registros da OAB e biografias continuam pendentes.
 
 **Para apenas visualizar, veja [COMECE-AQUI.md](COMECE-AQUI.md) e abra `ABRA-A-PREVIA.html` após baixar e extrair o ZIP do repositório. Não requer instalação nem hospedagem.**
 

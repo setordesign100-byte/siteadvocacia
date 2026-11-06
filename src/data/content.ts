@@ -225,9 +225,9 @@ export type TeamMember = {
 
 export const team: TeamMember[] = [
   {
-    name: 'Dr. Welson', role: 'Advogado', initials: 'W', shade: 'stone',
+    name: 'Dr. Eltonson Rezende', role: 'Advogado', initials: 'E', shade: 'stone',
     photo: '/images/team-welson-900.webp', photoSmall: '/images/team-welson-450.webp',
-    photoAlt: 'Retrato de Dr. Welson, da equipe RTM Advocacia.',
+    photoAlt: 'Retrato de Dr. Eltonson Rezende, da equipe RTM Advocacia.',
   },
   {
     name: 'Dr. Rommel Trevenzoli', role: 'Advogado', initials: 'R', shade: 'blue',
