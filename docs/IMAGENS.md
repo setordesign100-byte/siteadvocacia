@@ -18,6 +18,7 @@ As imagens editoriais de ambientes, objetos e cenas de atendimento são composi�
 | `contracts-editorial` | Publicação sobre contratos civis | 640 e 1200 px |
 | `health-plan-editorial` | Publicação sobre cobertura de planos de saúde | 640 e 1200 px |
 | `medical-liability-editorial` | Publicação sobre responsabilidade profissional na saúde | 640 e 1200 px |
+| `team-group` | Foto coletiva fornecida, acima dos perfis individuais | 640 e 1098 px |
 | `team-welson` | Retrato real do Dr. Eltonson Rezende, no cartão e no perfil | 450 e 900 px |
 | `team-rommel` | Retrato real do Dr. Rommel Trevenzoli, no cartão e no perfil | 450 e 900 px |
 | `team-osvaldo` | Retrato real do Dr. Osvaldo Marques, no cartão e no perfil | 450 e 900 px |
@@ -40,6 +41,10 @@ Os quatro retratos foram fornecidos pelo usuário em um ZIP com os originais `We
 As fotografias aparecem tanto nos cartões quanto nas janelas individuais de perfil. O componente aplica o enquadramento vertical 4:5 por CSS e seleciona a variante adequada à tela. Os nomes exibidos são Dr. Eltonson Rezende, Dr. Rommel Trevenzoli, Dr. Osvaldo Marques e Dr. Wesley Rezende. O responsável confirmou o nome do Dr. Eltonson Rezende após o envio do arquivo originalmente chamado `Welson.png`; os nomes técnicos `team-welson` foram mantidos. Biografias, qualificações e inscrições na OAB continuam aguardando confirmação.
 
 Para trocar um retrato futuramente, mantenha a associação do arquivo ao profissional em `src/data/content.ts`, as variantes responsivas e uma descrição alternativa coerente. Não inclua dados pessoais além dos autorizados para publicação.
+
+## Foto coletiva fornecida
+
+A foto coletiva foi recebida em ZIP como PNG de **1098 × 731 pixels** e incluída acima dos perfis individuais. Os arquivos `team-group-640.webp` e `team-group-1098.webp` são variantes responsivas com a proporção original preservada, sem recortar a composição. A implementação apenas otimizou o arquivo para WebP; não gerou nem alterou as pessoas retratadas. Os quatro retratos individuais e a marca extra na abertura da seção foram mantidos.
 
 ## Movimento
 

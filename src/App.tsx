@@ -112,6 +112,10 @@ export default function App() {
       <section id="equipe" className="team section-pad container">
         <div className="team-brand" data-reveal><Brand /></div>
         <div data-reveal><SectionLabel number="04">{copy.team.label}</SectionLabel></div><div className="section-heading" data-reveal><EditorialHeading text={copy.team.title} accent="RTM Advocacia." /><p>{copy.team.text}</p></div>
+        <figure className="team-group" data-reveal>
+          <img src="/images/team-group-1098.webp" srcSet="/images/team-group-640.webp 640w, /images/team-group-1098.webp 1098w" sizes="(max-width: 700px) calc(100vw - 40px), (max-width: 1152px) calc(100vw - 112px), 1040px" width="1098" height="731" loading="lazy" decoding="async" alt="Os quatro profissionais da RTM Advocacia reunidos em uma fotografia de equipe." />
+          <figcaption>Equipe RTM Advocacia</figcaption>
+        </figure>
         <div className="team-grid">{team.map((person, index) => <button className="team-card" key={person.name} onClick={() => setPanel({ kind: 'profile', index })} data-reveal data-reveal-delay={index * 60}><div className={`team-portrait ${person.shade}`}>{person.photo ? <TeamPortrait person={person} /> : <><span className="portrait-grid" /><span className="portrait-initial" aria-hidden="true">{person.initials}</span><span className="portrait-note">FOTOGRAFIA EM BREVE</span></>}<span className="portrait-arrow"><ArrowUpRight size={21} /></span></div><div className="team-info"><div><h3>{person.name}</h3><span>{person.role}</span></div><span className="profile-link">Ver perfil<ArrowUpRight size={15} /></span></div></button>)}</div>
         <p className="editorial-note">Biografias e registros profissionais serão incluídos após a validação do escritório.</p>
       </section>

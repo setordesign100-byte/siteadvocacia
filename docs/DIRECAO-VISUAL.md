@@ -42,7 +42,7 @@ React, TypeScript e Vite foram escolhidos porque não havia arquitetura existent
 
 As fotografias reais dos quatro profissionais foram incluídas a partir do ZIP enviado pelo usuário e aparecem nos cartões e nas janelas de perfil. Os nomes exibidos são Dr. Eltonson Rezende, Dr. Rommel Trevenzoli, Dr. Osvaldo Marques e Dr. Wesley Rezende. O nome do Dr. Eltonson Rezende foi confirmado pelo responsável; biografias, qualificações e registros da OAB estão pendentes. As cinco pautas editoriais e suas sinopses vêm da copy revisada e estão identificadas como sugestões em preparação; não foram apresentadas como artigos completos ou publicações já realizadas. O responsável confirmou a versão final; o metadado `noindex, nofollow` permanece e não foi alterado no pedido de retirada da faixa superior.
 
-A revisão visual inclui 12 composições fotográficas ilustrativas diferentes, relacionadas individualmente ao banner, às áreas, ao escritório e às cinco pautas de publicação. Inventário, regularização imobiliária, contratos, cobertura de planos e responsabilidade médica recebem fotografias próprias. Essas cenas editoriais não representam a sede da RTM ou pessoas reais da equipe. Separadamente, os quatro retratos enviados pelo usuário representam os profissionais identificados nos arquivos e foram otimizados para WebP em variantes de 450 e 900 px, sem edição de identidade por IA. O enquadramento dos cartões usa proporção 4:5 por CSS. Veja [IMAGENS.md](IMAGENS.md).
+A revisão visual inclui 12 composições fotográficas ilustrativas diferentes, relacionadas individualmente ao banner, às áreas, ao escritório e às cinco pautas de publicação. Inventário, regularização imobiliária, contratos, cobertura de planos e responsabilidade médica recebem fotografias próprias. Essas cenas editoriais não representam a sede da RTM ou pessoas reais da equipe. Separadamente, os quatro retratos enviados pelo usuário representam os profissionais identificados nos arquivos e foram otimizados para WebP em variantes de 450 e 900 px, sem edição de identidade por IA. O enquadramento dos cartões usa proporção 4:5 por CSS. A foto coletiva fornecida foi acrescentada acima dos perfis, com a proporção do PNG de 1098 × 731 px preservada em variantes WebP de 640 e 1098 px. Veja [IMAGENS.md](IMAGENS.md).
 
 O WhatsApp foi confirmado pelo usuário e configurado em `src/data/contact.ts`: +55 (31) 99196-7003. O botão flutuante e o CTA de contato abrem o mesmo destino em nova aba, com uma mensagem inicial que depende de envio pelo visitante. E-mail, endereço e horários permanecem pendentes. Não foi criado formulário com envio simulado ou coleta sem destino definido. O arquivo `ABRA-A-PREVIA.html` continua sendo exportado com todos os recursos incorporados para visualização local.
 
@@ -118,15 +118,21 @@ O PDF final tem 12 páginas A4, sumário clicável e prints com passos numerados
 
 ### Marca na apresentação da equipe — 06/11/2026
 
-A marca RTM já utilizada no cabeçalho e no rodapé também aparece na abertura da seção da equipe, entre linhas discretas. A aplicação permanece visível em celulares e telas maiores, com espaçamento adaptado à largura da tela. A fotografia coletiva apresentada na conversa ainda depende do envio como arquivo acessível para sua inclusão; ela não foi substituída por uma imagem gerada ou por outra fotografia.
+A marca RTM já utilizada no cabeçalho e no rodapé também aparece na abertura da seção da equipe, entre linhas discretas. A aplicação permanece visível em celulares e telas maiores, com espaçamento adaptado à largura da tela. Após o recebimento do arquivo em ZIP, a foto coletiva fornecida foi incluída acima dos perfis individuais, sem substituir os retratos existentes.
 
 O build e a prévia independente foram atualizados, e quatro testes existentes em celular passaram: navegação e largura da página, equipe e perfis, movimento reduzido e verificações automatizadas de acessibilidade. A aplicação da marca foi revisada em capturas de celular e desktop; o ZIP de hospedagem contém a alteração.
 
 ### Confirmação da versão e retirada da faixa
 
-O responsável confirmou a versão final e solicitou retirar a faixa superior “Versão de apresentação”. Essa faixa foi removida. O pedido não altera os metadados `noindex, nofollow` nem preenche os dados profissionais que ainda não foram fornecidos. A fotografia coletiva continua aguardando o original em JPG, PNG ou ZIP acessível; sua posição prevista é acima dos perfis individuais, sem substituir os retratos já incluídos.
+O responsável confirmou a versão final e solicitou retirar a faixa superior “Versão de apresentação”. Essa faixa foi removida. O pedido não altera os metadados `noindex, nofollow` nem preenche os dados profissionais que ainda não foram fornecidos. A foto coletiva foi posteriormente recebida em ZIP e incluída na posição solicitada, acima dos perfis individuais. As variantes `team-group-640.webp` e `team-group-1098.webp` preservam a proporção original de 1098 × 731 px, sem recortes nem geração ou alteração das pessoas pela implementação.
 
 Os avisos específicos do rodapé e dos documentos legais permanecem, pois a solicitação se limitou à faixa superior. Build, prévia independente e ZIP foram atualizados; seis testes existentes em desktop e celular passaram, cobrindo conteúdo e ausência de transbordamento, navegação e verificações automatizadas WCAG.
+
+### Foto coletiva fornecida acima dos perfis
+
+O PNG de 1098 × 731 px enviado em ZIP foi incluído em `figure.team-group`, antes da grade dos quatro perfis. As variantes WebP têm 640 × 426 e 1098 × 731 px; a apresentação usa altura automática e largura máxima de 1040 px, mantendo a composição sem recortes. A implementação otimizou o arquivo fornecido, sem gerar ou alterar as pessoas da foto. A marca extra e os perfis individuais foram mantidos.
+
+Build e prévia independente passaram. Doze testes existentes em desktop, tablet e celular foram aprovados, cobrindo conteúdo e ausência de transbordamento, os quatro perfis, movimento reduzido e verificações automatizadas WCAG. O pacote de hospedagem atualizado contém 65 arquivos, incluindo as duas variantes da foto coletiva.
 
 ### Pendências de conteúdo e configuração
 

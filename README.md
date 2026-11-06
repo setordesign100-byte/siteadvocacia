@@ -1,6 +1,6 @@
 # RTM Advocacia
 
-Website institucional responsivo em React + TypeScript + Vite, com blog público e painel de publicações apoiados por uma API PHP. Inclui composição fotográfica editorial, retratos reais dos quatro profissionais, áreas detalhadas, etapas de atendimento, filtros de pautas e perguntas frequentes. O WhatsApp está configurado; e-mail, endereço, horários, registros da OAB e biografias continuam pendentes.
+Website institucional responsivo em React + TypeScript + Vite, com blog público e painel de publicações apoiados por uma API PHP. Inclui composição fotográfica editorial, retratos dos quatro profissionais e foto coletiva fornecida pelo usuário, áreas detalhadas, etapas de atendimento, filtros de pautas e perguntas frequentes. O WhatsApp está configurado; e-mail, endereço, horários, registros da OAB e biografias continuam pendentes.
 
 **Para apenas visualizar, veja [COMECE-AQUI.md](COMECE-AQUI.md) e abra `ABRA-A-PREVIA.html` após baixar e extrair o ZIP do repositório. Não requer instalação nem hospedagem.**
 
@@ -74,7 +74,7 @@ Gera `dist/rtm-preview.html` e `ABRA-A-PREVIA.html`, arquivos independentes com 
 - `src/components/HeroBanner.tsx`: banner fotográfico único em largura total, relacionado às especialidades.
 - `src/components/FloatingWhatsApp.tsx` e `src/data/contact.ts`: botão flutuante e número público confirmado do escritório. O link usa `wa.me` e abre uma mensagem pré-preenchida sem enviá-la automaticamente.
 - `src/tokens.css`, `src/styles.css` e `src/visual-refresh.css`: identidade visual, estilos compartilhados e composição fotográfica responsiva.
-- `public/images/`: imagens editoriais ilustrativas geradas para o projeto e os quatro retratos reais enviados pelo usuário, todos otimizados em WebP. Os arquivos `team-{welson,rommel,osvaldo,wesley}-{450,900}.webp` são usados nos cartões e nos perfis da equipe; as demais imagens não representam a sede ou os profissionais da RTM.
+- `public/images/`: imagens editoriais ilustrativas geradas para o projeto, os quatro retratos e a foto coletiva enviados pelo usuário, todos otimizados em WebP. Os arquivos `team-{welson,rommel,osvaldo,wesley}-{450,900}.webp` são usados nos cartões e nos perfis; `team-group-{640,1098}.webp` mostra a foto coletiva acima deles, com proporção preservada. As composições editoriais geradas não representam a sede ou os profissionais da RTM.
 - `tests/site.spec.ts`: testes de comportamento e verificações axe-core.
 - `tests/whatsapp-links.test.mjs`: validação de números brasileiros e codificação segura da mensagem; executada pelo `npm test` antes do Playwright.
 - [Direção visual e limitações do benchmark](docs/DIRECAO-VISUAL.md): decisões, fontes, escopo e pendências.
@@ -88,4 +88,4 @@ Gera `dist/rtm-preview.html` e `ABRA-A-PREVIA.html`, arquivos independentes com 
 
 Fontes Manrope e Cormorant Garamond distribuídas por Fontsource sob OFL; os arquivos de licença acompanham os pacotes instalados. As fontes e imagens são carregadas do próprio site. A navegação pública não utiliza analytics, cookies de publicidade ou armazenamento local pela aplicação. O painel usa um cookie necessário de sessão para autenticação e recebe textos, imagens e os dados dos acessos autorizados. As senhas são armazenadas como hashes. O aviso de privacidade é preliminar e deve refletir também a configuração real da hospedagem.
 
-O responsável confirmou a versão final e solicitou a retirada da faixa superior “Versão de apresentação”. O metadado `noindex, nofollow` foi preservado neste pedido. As pendências reais de informações profissionais e a fotografia coletiva, que aguarda o arquivo original acessível, estão registradas na documentação de direção visual. Nenhuma análise visual dos sites de benchmark foi simulada.
+O responsável confirmou a versão final e solicitou a retirada da faixa superior “Versão de apresentação”. O metadado `noindex, nofollow` foi preservado neste pedido. A foto coletiva fornecida foi incluída acima dos perfis individuais; permanecem as pendências reais de informações profissionais registradas na documentação de direção visual. Nenhuma análise visual dos sites de benchmark foi simulada.
