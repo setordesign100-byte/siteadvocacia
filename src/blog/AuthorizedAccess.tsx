@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { Check, KeyRound, ShieldCheck, UserPlus, UserX } from 'lucide-react';
+import { Check, KeyRound, ShieldCheck, UserPlus, UserX, UserRoundPen } from 'lucide-react';
 import { Modal } from '../components/Modal';
 import { apiRequest, ApiError } from './api';
 import type { BlogSession } from './types';
@@ -19,7 +19,7 @@ type Props = {
 };
 
 export function AuthorizedAccess({ session, disabled = false, onSessionChange, onError }: Props) {
-  const [mode, setMode] = useState<'users' | 'password' | null>(null);
+  const [mode, setMode] = useState<'users' | 'password' | 'username' | null>(null);
   const [users, setUsers] = useState<AuthorizedUser[]>([]);
   const [loading, setLoading] = useState(false);
   const [working, setWorking] = useState(false);
@@ -37,8 +37,10 @@ export function AuthorizedAccess({ session, disabled = false, onSessionChange, o
     setError(''); setSuccess(''); setRevokingId(null);
   }
 
-  function open(nextMode: 'users' | 'password') {
-    clearFields(); setMode(nextMode);
+  function open(nextMode: 'users' | 'password' | 'username') {
+    clearFields();
+    if (nextMode === 'username') setUsername(session.username || '');
+    setMode(nextMode);
   }
 
   function close() {
@@ -119,12 +121,30 @@ export function AuthorizedAccess({ session, disabled = false, onSessionChange, o
     finally { setWorking(false); }
   }
 
+  async function changeUsername(event: FormEvent) {
+    event.preventDefault();
+    if (working) return;
+    setError(''); setSuccess('');
+    setWorking(true);
+    try {
+      const nextSession = await apiRequest<BlogSession>('change-username', {
+        method: 'POST', csrfToken: session.csrfToken,
+        body: { currentPassword, newUsername: username.trim() },
+      });
+      onSessionChange(nextSession);
+      setUsername(nextSession.username || username.trim()); setCurrentPassword('');
+      setSuccess('Usuário alterado. No próximo acesso, use o novo usuário com a mesma senha.');
+    } catch (cause) { await report(cause); }
+    finally { setWorking(false); }
+  }
+
   return <>
     <div className="blog-admin-access-actions">
       {session.role === 'admin' && <button type="button" className="blog-admin-quiet" disabled={disabled} onClick={() => open('users')}><ShieldCheck size={16} aria-hidden="true" />Gerenciar acessos</button>}
+      <button type="button" className="blog-admin-quiet" disabled={disabled} onClick={() => open('username')}><UserRoundPen size={16} aria-hidden="true" />Alterar meu usuário</button>
       <button type="button" className="blog-admin-quiet" disabled={disabled} onClick={() => open('password')}><KeyRound size={16} aria-hidden="true" />Alterar minha senha</button>
     </div>
-    {mode && <Modal title={mode === 'users' ? 'Acessos autorizados' : 'Alterar minha senha'} onClose={close}>
+    {mode && <Modal title={mode === 'users' ? 'Acessos autorizados' : mode === 'username' ? 'Alterar meu usuário' : 'Alterar minha senha'} onClose={close}>
       <div className="blog-admin-access-panel">
         {mode === 'users' ? <>
           <p>Somente o administrador principal pode liberar ou revogar acessos. Os editores autorizados podem administrar as publicações.</p>
@@ -145,7 +165,13 @@ export function AuthorizedAccess({ session, disabled = false, onSessionChange, o
             <label className="blog-admin-field">Confirmar senha do novo acesso<input aria-label="Confirmar senha do novo acesso" name="newUserPasswordConfirmation" type="password" autoComplete="new-password" value={confirmation} onChange={event => setConfirmation(event.target.value)} minLength={12} required disabled={working} /></label>
             <button className="blog-admin-button" type="submit" disabled={working}><UserPlus size={16} aria-hidden="true" />{working ? 'Aguarde…' : 'Criar acesso de editor'}</button>
           </form>
-        </> : <form onSubmit={changePassword}>
+        </> : mode === 'username' ? <form onSubmit={changeUsername}>
+          <p>Escolha o nome que você usará para entrar no painel. Sua senha e suas permissões continuam as mesmas. As outras sessões deste acesso precisarão entrar novamente.</p>
+          <label className="blog-admin-field">Novo usuário<input aria-label="Novo usuário" name="newUsername" autoComplete="username" value={username} onChange={event => setUsername(event.target.value)} minLength={3} maxLength={64} pattern="[a-zA-Z0-9][a-zA-Z0-9._-]{2,63}" required disabled={working} aria-describedby="change-username-help" /></label>
+          <p id="change-username-help" className="blog-admin-field-help">Use letras sem acento, números, ponto, hífen ou sublinhado. Mínimo de 3 caracteres.</p>
+          <label className="blog-admin-field">Senha atual<input aria-label="Senha atual" name="currentPassword" type="password" autoComplete="current-password" value={currentPassword} onChange={event => setCurrentPassword(event.target.value)} required disabled={working} /></label>
+          <button type="submit" className="blog-admin-button" disabled={working}><UserRoundPen size={16} aria-hidden="true" />{working ? 'Salvando…' : 'Salvar novo usuário'}</button>
+        </form> : <form onSubmit={changePassword}>
           <p>Altere a senha do seu próprio acesso. As demais sessões desse usuário precisarão entrar novamente.</p>
           <label className="blog-admin-field">Senha atual<input aria-label="Senha atual" name="currentPassword" type="password" autoComplete="current-password" value={currentPassword} onChange={event => setCurrentPassword(event.target.value)} required disabled={working} /></label>
           <label className="blog-admin-field">Nova senha<input aria-label="Nova senha" name="newPassword" type="password" autoComplete="new-password" value={newPassword} onChange={event => setNewPassword(event.target.value)} minLength={12} required disabled={working} aria-describedby="change-password-help" /></label>

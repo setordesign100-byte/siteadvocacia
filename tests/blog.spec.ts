@@ -255,3 +255,114 @@ test('only the principal authorizes editors, revocation closes their sessions an
     await otherPrincipal.dispose();
   }
 });
+
+test('a user can rename their own login without losing permissions or articles', async ({ page, request, playwright }, testInfo) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const renamedLogin = `principal.${testInfo.project.name}.${Date.now()}`;
+  const editorName = `renomear.editor.${testInfo.project.name}.${Date.now()}`;
+  const anonymous = await playwright.request.newContext({ baseURL: origin });
+  const otherPrincipal = await playwright.request.newContext({ baseURL: origin });
+  const editorClient = await playwright.request.newContext({ baseURL: origin });
+  let editor: AuthorizedUser | undefined;
+  let draft: SavedPost | undefined;
+
+  try {
+    const principalSession = await apiAccess(request);
+    const headers = { 'X-CSRF-Token': principalSession.csrfToken };
+    const createdEditor = await request.post(`${endpoint}create-user`, { headers, data: { username: editorName, password } });
+    expect(createdEditor.ok(), await createdEditor.text()).toBe(true);
+    editor = (await createdEditor.json()).user;
+    const createdDraft = await request.post(`${endpoint}save`, { headers, data: { title: `Rascunho preservado ${renamedLogin}`, status: 'draft' } });
+    expect(createdDraft.ok(), await createdDraft.text()).toBe(true);
+    draft = (await createdDraft.json()).post;
+    const articlesBefore = (await (await request.get(`${endpoint}manage`)).json()).posts;
+
+    const anonymousSession: Session = await (await anonymous.get(`${endpoint}session`)).json();
+    const deniedRename = await anonymous.post(`${endpoint}change-username`, {
+      headers: { 'X-CSRF-Token': anonymousSession.csrfToken }, data: { currentPassword: password, newUsername: renamedLogin },
+    });
+    expect([401, 403]).toContain(deniedRename.status());
+    expect((await request.post(`${endpoint}change-username`, { headers, data: { currentPassword: 'SenhaIncorreta-2026!', newUsername: renamedLogin } })).status()).toBe(422);
+    expect((await request.post(`${endpoint}change-username`, { headers, data: { currentPassword: password, newUsername: editorName } })).status()).toBe(409);
+
+    await apiAccess(otherPrincipal);
+    await uiAccess(page);
+    await page.getByRole('button', { name: 'Alterar meu usuário', exact: true }).click();
+    const dialog = page.getByRole('dialog');
+    await expect(dialog.getByRole('heading', { name: 'Alterar meu usuário', exact: true })).toBeVisible();
+    await expect(dialog.getByLabel('Novo usuário', { exact: true })).toHaveValue(username);
+    await dialog.getByLabel('Novo usuário', { exact: true }).fill(renamedLogin);
+    await dialog.getByLabel('Senha atual', { exact: true }).fill(password);
+    const renameResponse = waitsForAction(page, 'change-username');
+    await dialog.getByRole('button', { name: 'Salvar novo usuário', exact: true }).click();
+    const renamed = await renameResponse;
+    expect(renamed.ok(), await renamed.text()).toBe(true);
+    const renamedSession: Session = await renamed.json();
+    expect(renamedSession.username).toBe(renamedLogin);
+    expect(renamedSession.role).toBe('admin');
+    await expect(dialog.getByText('Usuário alterado. No próximo acesso, use o novo usuário com a mesma senha.', { exact: true })).toBeVisible();
+    await expect(dialog.getByRole('button', { name: 'Salvar novo usuário', exact: true })).toBeEnabled();
+    await page.keyboard.press('Escape');
+    await expect(page.locator('.blog-admin-top')).toContainText(renamedLogin);
+    const currentSession: Session = await (await page.request.get(`${endpoint}session`)).json();
+    expect(currentSession.csrfToken).toBe(renamedSession.csrfToken);
+    expect(currentSession.role).toBe('admin');
+    const articlesAfter = (await (await page.request.get(`${endpoint}manage`)).json()).posts;
+    expect(articlesAfter).toEqual(articlesBefore);
+    expect(articlesAfter.some((post: SavedPost) => post.id === draft!.id)).toBe(true);
+
+    expect((await otherPrincipal.get(`${endpoint}manage`)).status()).toBe(401);
+    const expiredSession: Session = await (await otherPrincipal.get(`${endpoint}session`)).json();
+    expect((await otherPrincipal.post(`${endpoint}login`, {
+      headers: { 'X-CSRF-Token': expiredSession.csrfToken }, data: { username, password },
+    })).status()).toBe(401);
+    // A fresh request initializes the same delivery again; it must preserve the
+    // renamed principal rather than restore the username from its install file.
+    const loggedInAgain = await apiAccess(otherPrincipal, renamedLogin);
+    expect(loggedInAgain.username).toBe(renamedLogin);
+    expect(loggedInAgain.role).toBe('admin');
+
+    const editorSession = await apiAccess(editorClient, editorName);
+    expect(editorSession.role).toBe('editor');
+    const editorHeaders = { 'X-CSRF-Token': editorSession.csrfToken };
+    expect((await editorClient.post(`${endpoint}change-username`, {
+      headers: editorHeaders, data: { currentPassword: password, newUsername: username },
+    })).status()).toBe(403);
+    const newEditorName = `editor.alterado.${testInfo.project.name}.${Date.now()}`;
+    const editorRename = await editorClient.post(`${endpoint}change-username`, {
+      headers: editorHeaders, data: { currentPassword: password, newUsername: newEditorName },
+    });
+    expect(editorRename.ok(), await editorRename.text()).toBe(true);
+    const changedEditor: Session = await editorRename.json();
+    expect(changedEditor.username).toBe(newEditorName);
+    expect(changedEditor.role).toBe('editor');
+    expect((await editorClient.get(`${endpoint}users`)).status()).toBe(403);
+    expect((await page.request.post(`${endpoint}create-user`, {
+      headers: { 'X-CSRF-Token': currentSession.csrfToken }, data: { username, password },
+    })).status()).toBe(403);
+  } finally {
+    const cleanup = await playwright.request.newContext({ baseURL: origin });
+    try {
+      let cleanupSession: Session | undefined;
+      for (const candidate of [renamedLogin, username]) {
+        try { cleanupSession = await apiAccess(cleanup, candidate); break; } catch { /* Try the unchanged name if the UI action did not finish. */ }
+      }
+      expect(cleanupSession).toBeDefined();
+      if (cleanupSession!.username !== username) {
+        const restored = await cleanup.post(`${endpoint}change-username`, {
+          headers: { 'X-CSRF-Token': cleanupSession!.csrfToken }, data: { currentPassword: password, newUsername: username },
+        });
+        expect(restored.ok(), await restored.text()).toBe(true);
+        cleanupSession = await restored.json();
+      }
+      const headers = { 'X-CSRF-Token': cleanupSession!.csrfToken };
+      if (editor) expect((await cleanup.post(`${endpoint}revoke-user`, { headers, data: { id: editor.id } })).ok()).toBe(true);
+      if (draft) expect((await cleanup.post(`${endpoint}delete`, { headers, data: { id: draft.id, updatedAt: draft.updatedAt } })).ok()).toBe(true);
+    } finally {
+      await cleanup.dispose();
+      await anonymous.dispose();
+      await otherPrincipal.dispose();
+      await editorClient.dispose();
+    }
+  }
+});

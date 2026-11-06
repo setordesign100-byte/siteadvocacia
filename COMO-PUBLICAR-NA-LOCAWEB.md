@@ -11,7 +11,7 @@ O blog precisa de **PHP 8.1 ou mais recente**, **sessões** e **Fileinfo** habil
 3. Envie **todo o conteúdo extraído do novo ZIP** para `public_html`. Ao atualizar o site existente, confirme a substituição dos arquivos de mesmo nome. Deixe `index.html` diretamente em `public_html`, com as pastas `assets`, `images`, `licenses`, `blog`, `painel`, `api` e o arquivo `favicon.svg`.
 4. Confira a estrutura abaixo. Os arquivos ficam diretamente em `public_html`, sem uma pasta `SITE-RTM` intermediária.
 5. Acesse o seu domínio pelo navegador. Se ainda aparecer a versão anterior, recarregue com **Ctrl + F5** no Windows. Domínio e HTTPS são configurados no painel da hospedagem.
-6. Abra **[https://rtmadvocacia.com.br/painel/](https://rtmadvocacia.com.br/painel/)** e entre com **`admin.rtm`** e a senha principal fornecida separadamente nesta conversa. O pacote cria a conta principal a partir da configuração confiável; a página não oferece cadastro público. Veja [como usar o blog e liberar editores](COMO-USAR-O-BLOG.md).
+6. Abra **[https://rtmadvocacia.com.br/painel/](https://rtmadvocacia.com.br/painel/)** e entre com seu usuário e sua senha atuais. No primeiro acesso, use **`admin.rtm`** e a senha principal fornecida separadamente nesta conversa. O pacote cria a conta principal a partir da configuração confiável; a página não oferece cadastro público. Veja [como usar o blog e liberar editores](COMO-USAR-O-BLOG.md).
 
 ```text
 public_html/
@@ -48,4 +48,4 @@ O metadado `noindex, nofollow` permanece ativo: a página pode ser acessada pelo
 
 O ZIP contém o front-end compilado, a API PHP, a configuração principal e as licenças das dependências distribuídas. A configuração principal contém o usuário `admin.rtm`, o hash da senha e a identificação de provisionamento; a senha original é fornecida separadamente na conversa e fica fora do ZIP. O antigo cadastro por código de ativação fica desabilitado nesta versão. Somente o administrador principal pode liberar ou revogar editores pelo painel. O código-fonte de desenvolvimento e a prévia independente ficam fora do pacote. As alterações na estrutura do site exigem um novo pacote; os artigos são administrados pelo painel e ficam salvos na hospedagem.
 
-Nas atualizações normais, as senhas alteradas no painel são preservadas. Quando uma nova credencial principal for entregue para substituir a anterior, use os novos dados. A atualização da versão anterior mantém artigos e imagens, substitui o acesso por ativação pelo login principal fornecido e invalida as sessões antigas.
+Nas atualizações normais, os nomes de usuário e as senhas alterados no painel são preservados. Quando uma nova credencial principal for entregue para substituir a anterior, use os novos dados. A atualização da versão anterior mantém artigos e imagens, substitui o acesso por ativação pelo login principal fornecido e invalida as sessões antigas.

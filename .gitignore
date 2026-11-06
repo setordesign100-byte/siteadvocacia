@@ -9,4 +9,5 @@ rtm-blog-private/
 public/uploads/
 *.activation-code
 *.admin-credentials
+*.manual-access
 __pycache__/

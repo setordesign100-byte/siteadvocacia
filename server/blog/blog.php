@@ -15,7 +15,7 @@ try {
     }
     $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
     $readActions = ['posts', 'post', 'session', 'manage', 'users'];
-    $writeActions = ['login', 'logout', 'save', 'upload', 'delete', 'create-user', 'revoke-user', 'change-password'];
+    $writeActions = ['login', 'logout', 'save', 'upload', 'delete', 'create-user', 'revoke-user', 'change-password', 'change-username'];
     if (!in_array($action, array_merge($readActions, $writeActions), true)) {
         rtm_fail(404, 'A operação solicitada não foi encontrada.');
     }
@@ -129,6 +129,9 @@ try {
                     rtm_fail(409, 'Esse nome de usuário já está em uso. Escolha outro.');
                 }
             }
+            if (strtolower($username) === strtolower(rtm_primary_configuration()['username'])) {
+                rtm_fail(403, 'Esse nome é reservado ao administrador principal. Escolha outro para o editor.');
+            }
             if (count($state['users']) >= 101) {
                 rtm_fail(422, 'O limite de acessos autorizados foi atingido.');
             }
@@ -164,6 +167,44 @@ try {
             rtm_fail(404, 'O acesso não foi encontrado.');
         });
         rtm_json(['ok' => true]);
+    }
+    if ($action === 'change-username') {
+        $input = rtm_json_input();
+        $currentPassword = $input['currentPassword'] ?? '';
+        if (!is_string($currentPassword) || strlen($currentPassword) > 72 || str_contains($currentPassword, "\0")) {
+            rtm_fail(422, 'Confira sua senha atual.');
+        }
+        $username = rtm_validate_username(['username' => $input['newUsername'] ?? null]);
+        $changed = rtm_with_lock(function () use ($currentPassword, $username, $actor): array {
+            $state = rtm_read_user_state();
+            $current = rtm_check_actor($state, $actor);
+            rtm_check_throttle();
+            if (!password_verify($currentPassword, $current['passwordHash'])) {
+                rtm_record_failed_attempt();
+                rtm_fail(422, 'A senha atual está incorreta.');
+            }
+            foreach ($state['users'] as $user) {
+                if ($user['id'] !== $current['id'] && strtolower($user['username']) === strtolower($username)) {
+                    rtm_fail(409, 'Esse nome de usuário já está em uso. Escolha outro.');
+                }
+            }
+            if ($current['role'] !== 'admin' && strtolower($username) === strtolower(rtm_primary_configuration()['username'])) {
+                rtm_fail(403, 'Esse nome é reservado ao administrador principal. Escolha outro.');
+            }
+            $current['username'] = $username;
+            $current['credentialVersion'] = bin2hex(random_bytes(16));
+            $current['updatedAt'] = rtm_now();
+            foreach ($state['users'] as $index => $user) {
+                if ($user['id'] === $current['id']) {
+                    $state['users'][$index] = $current;
+                }
+            }
+            rtm_write_json('users.json', $state);
+            rtm_clear_failed_attempts();
+            return $current;
+        });
+        rtm_authenticate($changed);
+        rtm_json(rtm_session_data());
     }
     if ($action === 'change-password') {
         $input = rtm_json_input();

@@ -103,6 +103,19 @@ Os resultados desta seção pertencem à versão anterior com ativação por có
 - Capturas em [previa-acesso-restrito.jpg](previa-acesso-restrito.jpg), [previa-acessos-autorizados.jpg](previa-acessos-autorizados.jpg) e [previa-painel-blog.jpg](previa-painel-blog.jpg). São registros de uma instalação isolada para revisão.
 - O domínio foi confirmado pelo responsável. A consulta externa a `rtmadvocacia.com.br` foi bloqueada pelo proxy deste ambiente (403 no túnel); isso não é um diagnóstico do site. Não houve envio de arquivos à Locaweb, alteração de DNS ou validação do painel em produção.
 
+### Manual ilustrado e alteração do próprio login — 06/11/2026
+
+A solicitação do manual incluiu ensinar a mudança do nome de usuário, função que ainda não existia na versão anterior. Foi acrescentado o controle **Alterar meu usuário**, com confirmação da senha atual. A API exige autenticação e CSRF, mantém o identificador e o perfil do usuário, preserva as publicações e invalida as outras sessões. Nomes duplicados são recusados; o nome de provisionamento principal permanece reservado ao administrador. A sessão atual recebe o usuário atualizado, inclusive para o preenchimento do próximo login.
+
+- `npm run preview:export`: build e prévia independente atualizados.
+- `npm test`: 8 testes de WhatsApp e 39 testes institucionais aprovados. `npm run test:blog`, com PHP real, aprovou 8 testes em desktop e celular. Total: **55 testes aprovados**.
+- O novo teste verifica a alteração pela interface, a manutenção das permissões e artigos, a entrada com o novo nome após uma nova inicialização, a invalidação de outra sessão e a rejeição de senha incorreta, nomes duplicados e tentativa de um editor assumir o nome reservado do principal.
+- O pacote de hospedagem foi atualizado com a nova função, sem mudar a credencial principal entregue nem a identificação de provisionamento. Os dados já alterados pelo responsável na hospedagem continuam sendo a referência para seu acesso.
+
+O manual em [PDF](../entregas/MANUAL-PAINEL-RTM.pdf) inclui os dados de acesso fornecidos com a entrega e instruções com prints reais de uma instalação isolada. Por conter a credencial principal solicitada pelo responsável, o PDF é criptografado; a senha de abertura é entregue separadamente na conversa. O PDF sem proteção, as credenciais em texto puro e as capturas intermediárias ficam fora do repositório e do ZIP de hospedagem. O documento informa que dados alterados pelo responsável substituem a credencial inicial impressa.
+
+O PDF final tem 12 páginas A4, sumário clicável e prints com passos numerados. Todas as páginas foram renderizadas e revisadas visualmente; a abertura com a senha correta, a rejeição de senha incorreta, os links e a criptografia AES-256 foram verificados. O pacote de hospedagem não inclui o manual nem suas credenciais em texto puro.
+
 ### Antes da publicação
 
 1. Confirmar nome institucional e qualificações/inscrição da sociedade, quando aplicáveis.

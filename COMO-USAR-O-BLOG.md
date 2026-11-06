@@ -27,6 +27,10 @@ Somente o administrador principal pode criar e revogar acessos.
 
 O editor pode preparar e administrar as publicações do blog, mas não pode criar ou revogar contas. Para retirar um acesso, use **Revogar acesso de...** na lista e confirme em **Confirmar revogação**. A revogação impede novas ações daquele usuário, inclusive em uma sessão que já estava aberta. O administrador principal não pode revogar o próprio acesso.
 
+## Alterar seu usuário de entrada
+
+Entre no painel, escolha **Alterar meu usuário**, preencha **Novo usuário** e confirme a **Senha atual**. Clique em **Salvar novo usuário**. Use letras sem acento, números, ponto, hífen ou sublinhado, com pelo menos 3 caracteres. No próximo acesso, entre com o novo usuário e a mesma senha. Cada pessoa altera somente o próprio usuário; suas permissões e publicações são preservadas. As outras sessões desse acesso precisarão entrar novamente.
+
 ## Alterar sua senha
 
 Entre no painel, escolha **Alterar minha senha**, preencha **Senha atual**, **Nova senha** e **Confirmar nova senha** e clique em **Salvar nova senha**. Cada usuário pode alterar a própria senha. A nova senha substitui a anterior e encerra as outras sessões desse acesso.

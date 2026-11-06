@@ -79,6 +79,7 @@ Gera `dist/rtm-preview.html` e `ABRA-A-PREVIA.html`, arquivos independentes com 
 - `tests/whatsapp-links.test.mjs`: validação de números brasileiros e codificação segura da mensagem; executada pelo `npm test` antes do Playwright.
 - [Direção visual e limitações do benchmark](docs/DIRECAO-VISUAL.md): decisões, fontes, escopo e pendências.
 - [Como usar o blog](COMO-USAR-O-BLOG.md): primeiro acesso e rotina de publicação.
+- [Manual ilustrado em PDF](entregas/MANUAL-PAINEL-RTM.pdf): passos para iniciantes com prints numerados; senha de abertura entregue ao responsável.
 - [Tela do blog](docs/previa-blog.jpg) e [painel de publicações](docs/previa-painel-blog.jpg): capturas da revisão em ambiente de testes.
 - [Entrada restrita](docs/previa-acesso-restrito.jpg) e [acessos autorizados](docs/previa-acessos-autorizados.jpg): login e gerenciamento exclusivo do administrador principal.
 - [Imagens e preparação dos retratos](docs/IMAGENS.md): origem dos recursos e encaixe das fotos reais da equipe.
