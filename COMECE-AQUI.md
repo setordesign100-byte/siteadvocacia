@@ -40,8 +40,8 @@ Alterações salvas nos arquivos **desse computador** aparecem automaticamente n
 
 Para atualizar o arquivo de apresentação independente, execute `npm run preview:export` na pasta do projeto. Ele gera `ABRA-A-PREVIA.html` e `dist/rtm-preview.html`.
 
-## Situação desta apresentação
+## Situação da versão
 
-Os retratos reais de Dr. Eltonson Rezende, Dr. Rommel Trevenzoli, Dr. Osvaldo Marques e Dr. Wesley Rezende foram incluídos a partir do ZIP enviado pelo usuário. O nome do Dr. Eltonson Rezende foi confirmado posteriormente pelo responsável. O WhatsApp está configurado; registros da OAB, biografias, e-mail, endereço e horários continuam pendentes. O site mantém a indicação de revisão e os metadados para evitar indexação.
+Os retratos reais de Dr. Eltonson Rezende, Dr. Rommel Trevenzoli, Dr. Osvaldo Marques e Dr. Wesley Rezende foram incluídos a partir do ZIP enviado pelo usuário. O nome do Dr. Eltonson Rezende foi confirmado posteriormente pelo responsável. O WhatsApp está configurado; registros da OAB, biografias, e-mail, endereço e horários continuam pendentes. O responsável confirmou a versão final e pediu a retirada da faixa superior de apresentação. Os metadados para evitar indexação permanecem nesta alteração. A foto coletiva aguarda o envio do arquivo original acessível para ser incluída acima dos perfis.
 
 O repositório não altera a hospedagem ou o DNS automaticamente. Para enviar ou atualizar os arquivos na pasta `public_html` da Locaweb, use o pacote **SITE-RTM-LOCAWEB.zip** e siga [as instruções de publicação](COMO-PUBLICAR-NA-LOCAWEB.md). Nas atualizações, preserve as imagens de `public_html/uploads/blog/` e a pasta de dados `rtm-blog-private` fora da raiz pública.

@@ -42,7 +42,7 @@ Se o painel informar que não pode criar ou gravar essas pastas, peça ao suport
 
 ## Conteúdo desta entrega
 
-Este ZIP contém a versão atual de revisão, agora com publicação real pelo painel. Permanecem os avisos de apresentação, os dados profissionais pendentes e os documentos de privacidade e termos preliminares. As cinco pautas sugeridas da página inicial continuam em preparação; os artigos criados e publicados pelo painel são conteúdos separados. O WhatsApp confirmado é **(31) 99196-7003**.
+Este ZIP contém a versão confirmada pelo responsável, com publicação real pelo painel e a faixa superior “Versão de apresentação” retirada a seu pedido. Permanecem os dados profissionais pendentes e os documentos de privacidade e termos preliminares. As cinco pautas sugeridas da página inicial continuam em preparação; os artigos criados e publicados pelo painel são conteúdos separados. O WhatsApp confirmado é **(31) 99196-7003**.
 
 O metadado `noindex, nofollow` permanece ativo: a página pode ser acessada pelo domínio, mas solicita aos mecanismos de busca que não a indexem. Ele poderá ser retirado na finalização das informações institucionais. As fotografias editoriais são ilustrativas. Os retratos reais de Dr. Eltonson Rezende, Dr. Rommel Trevenzoli, Dr. Osvaldo Marques e Dr. Wesley Rezende aparecem nos cartões e nos perfis da equipe. Os registros da OAB e as biografias continuam pendentes.
 

@@ -40,7 +40,7 @@ As características atribuídas a Lefosse, Cescon Barrieu e TozziniFreire no ped
 
 React, TypeScript e Vite foram escolhidos porque não havia arquitetura existente. O front-end institucional é compilado para arquivos estáticos; a ampliação do blog acrescenta uma API PHP com persistência na hospedagem. O conteúdo institucional continua editável em `src/data/content.ts`; componentes, estilos e tokens ficam separados. A área pública não utiliza analytics, cookies de publicidade ou armazenamento local pela aplicação. O painel recebe artigos, imagens e os dados dos acessos autorizados; as senhas são armazenadas como hashes e um cookie necessário mantém a autenticação. Não foi criado formulário que simule envio, telefone fictício ou link de WhatsApp inválido.
 
-As fotografias reais dos quatro profissionais foram incluídas a partir do ZIP enviado pelo usuário e aparecem nos cartões e nas janelas de perfil. Os nomes exibidos são Dr. Eltonson Rezende, Dr. Rommel Trevenzoli, Dr. Osvaldo Marques e Dr. Wesley Rezende. O nome do Dr. Eltonson Rezende foi confirmado pelo responsável; biografias, qualificações e registros da OAB estão pendentes. As cinco pautas editoriais e suas sinopses vêm da copy revisada e estão identificadas como sugestões em preparação; não foram apresentadas como artigos completos ou publicações já realizadas. A aplicação permanece com `noindex, nofollow` até aprovação para publicação.
+As fotografias reais dos quatro profissionais foram incluídas a partir do ZIP enviado pelo usuário e aparecem nos cartões e nas janelas de perfil. Os nomes exibidos são Dr. Eltonson Rezende, Dr. Rommel Trevenzoli, Dr. Osvaldo Marques e Dr. Wesley Rezende. O nome do Dr. Eltonson Rezende foi confirmado pelo responsável; biografias, qualificações e registros da OAB estão pendentes. As cinco pautas editoriais e suas sinopses vêm da copy revisada e estão identificadas como sugestões em preparação; não foram apresentadas como artigos completos ou publicações já realizadas. O responsável confirmou a versão final; o metadado `noindex, nofollow` permanece e não foi alterado no pedido de retirada da faixa superior.
 
 A revisão visual inclui 12 composições fotográficas ilustrativas diferentes, relacionadas individualmente ao banner, às áreas, ao escritório e às cinco pautas de publicação. Inventário, regularização imobiliária, contratos, cobertura de planos e responsabilidade médica recebem fotografias próprias. Essas cenas editoriais não representam a sede da RTM ou pessoas reais da equipe. Separadamente, os quatro retratos enviados pelo usuário representam os profissionais identificados nos arquivos e foram otimizados para WebP em variantes de 450 e 900 px, sem edição de identidade por IA. O enquadramento dos cartões usa proporção 4:5 por CSS. Veja [IMAGENS.md](IMAGENS.md).
 
@@ -64,7 +64,7 @@ Essa ampliação usa PHP 8.1 ou mais recente em sua implementação; para a hosp
 
 A compilação executa o TypeScript antes de gerar o build. A suíte Playwright usa Chromium em desktop, tablet e celular para verificar conteúdo, imagem, âncoras, ausência de transbordamento horizontal, áreas expansíveis, perfis, artigos, contato, navegação responsiva, foco ao fechar janelas, privacidade e acessibilidade via axe-core. Isso não equivale a auditoria WCAG completa nem comprova compatibilidade em Safari e Firefox. A revisão visual foi realizada com screenshots desktop e mobile.
 
-As imagens são WebP responsivas; as fontes são locais; não há scripts de terceiros no runtime. Core Web Vitals de campo dependem de hospedagem e tráfego reais e não foram medidos. Aprovação jurídica/editorial, conformidade efetiva com publicidade da OAB e política definitiva de dados dependem da revisão do escritório.
+As imagens são WebP responsivas; as fontes são locais; não há scripts de terceiros no runtime. Core Web Vitals de campo dependem de hospedagem e tráfego reais e não foram medidos. A conformidade efetiva com publicidade da OAB e a política definitiva de dados dependem das informações e da revisão do escritório.
 
 ### Validação dos retratos — 05/11/2026
 
@@ -122,7 +122,13 @@ A marca RTM já utilizada no cabeçalho e no rodapé também aparece na abertura
 
 O build e a prévia independente foram atualizados, e quatro testes existentes em celular passaram: navegação e largura da página, equipe e perfis, movimento reduzido e verificações automatizadas de acessibilidade. A aplicação da marca foi revisada em capturas de celular e desktop; o ZIP de hospedagem contém a alteração.
 
-### Antes da publicação
+### Confirmação da versão e retirada da faixa
+
+O responsável confirmou a versão final e solicitou retirar a faixa superior “Versão de apresentação”. Essa faixa foi removida. O pedido não altera os metadados `noindex, nofollow` nem preenche os dados profissionais que ainda não foram fornecidos. A fotografia coletiva continua aguardando o original em JPG, PNG ou ZIP acessível; sua posição prevista é acima dos perfis individuais, sem substituir os retratos já incluídos.
+
+Os avisos específicos do rodapé e dos documentos legais permanecem, pois a solicitação se limitou à faixa superior. Build, prévia independente e ZIP foram atualizados; seis testes existentes em desktop e celular passaram, cobrindo conteúdo e ausência de transbordamento, navegação e verificações automatizadas WCAG.
+
+### Pendências de conteúdo e configuração
 
 1. Confirmar nome institucional e qualificações/inscrição da sociedade, quando aplicáveis.
 2. Confirmar qualificações, registros da OAB e biografias. Os quatro retratos autorizados já foram recebidos e incluídos; o nome do Dr. Eltonson Rezende está confirmado.
@@ -130,5 +136,5 @@ O build e a prévia independente foram atualizados, e quatro testes existentes e
 4. Substituir a assinatura provisória pelo arquivo oficial do logo.
 5. Revisar áreas, textos institucionais e conteúdos informativos com os responsáveis.
 6. Definir controlador, canal de privacidade, serviços da hospedagem e política de retenção; atualizar o aviso conforme o tratamento real.
-7. Configurar domínio, HTTPS, URL canônica, metadados de compartilhamento e sitemap com o endereço confirmado; retirar `noindex` somente após aprovação.
+7. Configurar domínio, HTTPS, URL canônica, metadados de compartilhamento e sitemap conforme a hospedagem; `noindex, nofollow` permanece ativo e não foi alterado neste pedido.
 8. Retomar o benchmark quando houver acesso aos sites e medir o desempenho no ambiente de hospedagem.

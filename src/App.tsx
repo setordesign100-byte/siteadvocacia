@@ -64,7 +64,6 @@ export default function App() {
 
   return <>
     <a className="skip-link" href="#conteudo">Ir para o conteúdo</a>
-    <div className="review-banner"><span className="review-dot" />Versão de apresentação <span className="banner-divider">/</span> Conteúdo institucional em revisão</div>
     <header className="header">
       <div className="reading-progress" aria-hidden="true" />
       <div className="header-inner container">
