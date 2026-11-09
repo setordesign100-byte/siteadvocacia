@@ -6,6 +6,7 @@ import { Modal } from './components/Modal';
 import { EditorialImage } from './components/EditorialImage';
 import { EditorialHeading } from './components/EditorialHeading';
 import { TeamPortrait } from './components/TeamPortrait';
+import { OfficeLogo } from './components/OfficeLogo';
 import { usePageMotion } from './components/usePageMotion';
 import { HeroBanner } from './components/HeroBanner';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
@@ -23,8 +24,7 @@ const practiceImages: ImageKey[] = ['property-editorial', 'consumer-rights-edito
 
 function Brand({ footer = false }: { footer?: boolean }) {
   return <a href="#inicio" className={`brand ${footer ? 'brand-footer' : ''}`} aria-label="RTM ADVOCACIA — início">
-    <svg className="brand-symbol" viewBox="0 0 72 65" aria-hidden="true"><path d="M4 20 36 5l32 15M8 24h56M9 56h54M14 28v23M36 28v23M58 28v23M7 60h58" fill="none" stroke="currentColor" strokeWidth="1.5" /><path d="m26 17 10-5 10 5" fill="none" stroke="currentColor" strokeWidth="1" /></svg>
-    <span className="brand-name">RTM{' '}<span>ADVOCACIA</span></span>
+    <OfficeLogo className={footer ? 'office-logo-inverse' : ''} />
   </a>;
 }
 

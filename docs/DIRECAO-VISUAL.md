@@ -2,7 +2,7 @@
 
 ## Base do projeto
 
-O repositório estava vazio. O briefing RTM.docx informa: divulgação institucional; atuação em Direito Civil, do Consumidor e Médico; inventários, regularização de imóveis e contratos; defesa de profissionais da saúde e questões de consumidores com planos de saúde. A equipe reúne Dr. Eltonson Rezende, Dr. Rommel, Dr. Osvaldo e Dr. Wesley; o primeiro profissional foi inicialmente referido como Dr. Welson e teve o nome corrigido pelo responsável. A mensagem é de atendimento personalizado e próximo, com uma presença moderna. O domínio inicialmente informado no documento era `rtm.advocacia.com.br`. Em 05/11/2026, o responsável confirmou o domínio de publicação **`rtmadvocacia.com.br`**; a disponibilidade e a configuração operacional da hospedagem não foram confirmadas por esse dado.
+O repositório estava vazio. O briefing RTM.docx informa: divulgação institucional; atuação em Direito Civil, do Consumidor e Médico; inventários, regularização de imóveis e contratos; defesa de profissionais da saúde e questões de consumidores com planos de saúde. A equipe reúne Dr. Welson Rezende, Dr. Rommel, Dr. Osvaldo e Dr. Wesley. A mensagem é de atendimento personalizado e próximo, com uma presença moderna. O domínio inicialmente informado no documento era `rtm.advocacia.com.br`. Em 05/11/2026, o responsável confirmou o domínio de publicação **`rtmadvocacia.com.br`**; a disponibilidade e a configuração operacional da hospedagem não foram confirmadas por esse dado.
 
 Os documentos foram utilizados como fontes de informações do escritório. Suas perguntas, respostas e sugestões de componentes não foram tratadas como instruções operacionais independentes. O usuário autorizou o desenvolvimento, a ampliação visual e o envio posterior dos contatos, qualificações e retratos. A copy revisada da homepage foi incorporada em 23/10/2026.
 
@@ -34,13 +34,13 @@ As características atribuídas a Lefosse, Cescon Barrieu e TozziniFreire no ped
 - **Hierarquia:** apresentação → escritório → áreas de atuação → forma de atendimento → equipe → publicações → dúvidas frequentes → contato, com acesso ao blog pelo menu e página própria para os artigos.
 - **Componentes:** três cartões fotográficos de áreas com expansão do detalhamento correspondente; composição de duas imagens institucionais; cartões de profissionais; publicações recentes do blog e grade de pautas em preparação; perguntas frequentes com teclado; janelas nativas `dialog`; WhatsApp flutuante e contato direto; documentos preliminares. O blog tem busca, categorias e leitura individual; o painel organiza a criação em informações, imagem, texto e revisão.
 - **Movimento:** entradas suaves ao rolar, aproximação leve de fotografias ao passar o ponteiro, transições nos componentes e indicador de progresso. `prefers-reduced-motion` remove os movimentos e cancela animações em execução. O conteúdo permanece visível sem a animação; não há vídeo, carrossel automático ou movimento contínuo.
-- **Identidade:** o cabeçalho utiliza assinatura tipográfica provisória RTM com símbolo linear. Não se trata de reprodução fiel dos arquivos de logo apresentados no chat. A troca pelo arquivo original vetorial deverá preservar as proporções e versões oficiais da marca.
+- **Identidade:** a logo oficial recebida em ZIP substitui a assinatura provisória. A composição com RTM, templo e balança foi preservada, removendo apenas margens transparentes e otimizando o PNG para WebP. O componente `OfficeLogo` é compartilhado pelo cabeçalho, rodapé, equipe, blog e painel; a versão branca por CSS é usada somente em fundos escuros. O `favicon.svg` contém a marca fornecida.
 
 ## Etapa 3 — implementação
 
 React, TypeScript e Vite foram escolhidos porque não havia arquitetura existente. O front-end institucional é compilado para arquivos estáticos; a ampliação do blog acrescenta uma API PHP com persistência na hospedagem. O conteúdo institucional continua editável em `src/data/content.ts`; componentes, estilos e tokens ficam separados. A área pública não utiliza analytics, cookies de publicidade ou armazenamento local pela aplicação. O painel recebe artigos, imagens e os dados dos acessos autorizados; as senhas são armazenadas como hashes e um cookie necessário mantém a autenticação. Não foi criado formulário que simule envio, telefone fictício ou link de WhatsApp inválido.
 
-As fotografias reais dos quatro profissionais foram incluídas a partir do ZIP enviado pelo usuário e aparecem nos cartões e nas janelas de perfil. Os nomes exibidos são Dr. Eltonson Rezende, Dr. Rommel Trevenzoli, Dr. Osvaldo Marques e Dr. Wesley Rezende. O nome do Dr. Eltonson Rezende foi confirmado pelo responsável; biografias, qualificações e registros da OAB estão pendentes. As cinco pautas editoriais e suas sinopses vêm da copy revisada e estão identificadas como sugestões em preparação; não foram apresentadas como artigos completos ou publicações já realizadas. O responsável confirmou a versão final; o metadado `noindex, nofollow` permanece e não foi alterado no pedido de retirada da faixa superior.
+As fotografias reais dos quatro profissionais foram incluídas a partir do ZIP enviado pelo usuário e aparecem nos cartões e nas janelas de perfil. Os nomes exibidos são Dr. Welson Rezende, Dr. Rommel Trevenzoli, Dr. Osvaldo Marques e Dr. Wesley Rezende. O nome do Dr. Welson Rezende foi confirmado pelo responsável; biografias, qualificações e registros da OAB estão pendentes. As cinco pautas editoriais e suas sinopses vêm da copy revisada e estão identificadas como sugestões em preparação; não foram apresentadas como artigos completos ou publicações já realizadas. O responsável confirmou a versão final; o metadado `noindex, nofollow` permanece e não foi alterado no pedido de retirada da faixa superior.
 
 A revisão visual inclui 12 composições fotográficas ilustrativas diferentes, relacionadas individualmente ao banner, às áreas, ao escritório e às cinco pautas de publicação. Inventário, regularização imobiliária, contratos, cobertura de planos e responsabilidade médica recebem fotografias próprias. Essas cenas editoriais não representam a sede da RTM ou pessoas reais da equipe. Separadamente, os quatro retratos enviados pelo usuário representam os profissionais identificados nos arquivos e foram otimizados para WebP em variantes de 450 e 900 px, sem edição de identidade por IA. O enquadramento dos cartões usa proporção 4:5 por CSS. A foto coletiva fornecida foi acrescentada acima dos perfis, com a proporção do PNG de 1098 × 731 px preservada em variantes WebP de 640 e 1098 px. Veja [IMAGENS.md](IMAGENS.md).
 
@@ -132,15 +132,22 @@ Os avisos específicos do rodapé e dos documentos legais permanecem, pois a sol
 
 O PNG de 1098 × 731 px enviado em ZIP foi incluído em `figure.team-group`, antes da grade dos quatro perfis. As variantes WebP têm 640 × 426 e 1098 × 731 px; a apresentação usa altura automática e largura máxima de 1040 px, mantendo a composição sem recortes. A implementação otimizou o arquivo fornecido, sem gerar ou alterar as pessoas da foto. A marca extra e os perfis individuais foram mantidos.
 
-Build e prévia independente passaram. Doze testes existentes em desktop, tablet e celular foram aprovados, cobrindo conteúdo e ausência de transbordamento, os quatro perfis, movimento reduzido e verificações automatizadas WCAG. O pacote de hospedagem atualizado contém 65 arquivos, incluindo as duas variantes da foto coletiva.
+Build e prévia independente passaram. Doze testes existentes em desktop, tablet e celular foram aprovados, cobrindo conteúdo e ausência de transbordamento, os quatro perfis, movimento reduzido e verificações automatizadas WCAG. O pacote de hospedagem gerado nessa etapa continha 65 arquivos, incluindo as duas variantes da foto coletiva.
+
+### Logo oficial e título da equipe
+
+A logo oficial enviada em ZIP é um PNG transparente de 1598 × 984 px, com as letras RTM, templo e balança. Foi preparado `public/images/logo-rtm.webp`, WebP transparente sem perdas de 640 × 407 px, removendo apenas as margens transparentes, sem redesenhar a marca. A aplicação usa `OfficeLogo` no cabeçalho, rodapé, equipe, blog e painel, com versão branca por CSS somente em fundos escuros. O `favicon.svg` mantém o nome do arquivo e agora contém a marca recebida.
+
+O título da seção dos profissionais é “Conheça a equipe RTM Advocacia e Compliance”. O nome público do escritório continua RTM Advocacia, e o nome do profissional foi corrigido para Dr. Welson Rezende. A inclusão da marca acrescenta um WebP ao pacote de hospedagem; o favicon substitui o arquivo de mesmo nome.
+
+Validação de 09/11/2026: build e prévia independente atualizados; 55 testes aprovados (8 de WhatsApp, 39 institucionais e 8 do blog com PHP). A logo foi conferida na página inicial e no blog em 320, 390, 768 e 1440 px, com proporção preservada, navegação sem sobreposição e aplicação branca nos rodapés. O ZIP atualizado contém 66 arquivos, incluindo a marca fornecida, a foto coletiva e a correção do nome.
 
 ### Pendências de conteúdo e configuração
 
 1. Confirmar nome institucional e qualificações/inscrição da sociedade, quando aplicáveis.
-2. Confirmar qualificações, registros da OAB e biografias. Os quatro retratos autorizados já foram recebidos e incluídos; o nome do Dr. Eltonson Rezende está confirmado.
+2. Confirmar qualificações, registros da OAB e biografias. Os quatro retratos autorizados já foram recebidos e incluídos; o nome do Dr. Welson Rezende está confirmado.
 3. Confirmar e-mail, endereço e horários. O WhatsApp já está conectado ao número confirmado; o escritório deve conferir o recebimento no aplicativo.
-4. Substituir a assinatura provisória pelo arquivo oficial do logo.
-5. Revisar áreas, textos institucionais e conteúdos informativos com os responsáveis.
-6. Definir controlador, canal de privacidade, serviços da hospedagem e política de retenção; atualizar o aviso conforme o tratamento real.
-7. Configurar domínio, HTTPS, URL canônica, metadados de compartilhamento e sitemap conforme a hospedagem; `noindex, nofollow` permanece ativo e não foi alterado neste pedido.
-8. Retomar o benchmark quando houver acesso aos sites e medir o desempenho no ambiente de hospedagem.
+4. Revisar áreas, textos institucionais e conteúdos informativos com os responsáveis.
+5. Definir controlador, canal de privacidade, serviços da hospedagem e política de retenção; atualizar o aviso conforme o tratamento real.
+6. Configurar domínio, HTTPS, URL canônica, metadados de compartilhamento e sitemap conforme a hospedagem; `noindex, nofollow` permanece ativo e não foi alterado neste pedido.
+7. Retomar o benchmark quando houver acesso aos sites e medir o desempenho no ambiente de hospedagem.

@@ -158,7 +158,7 @@ test('the four team members show their supplied portraits and accessible individ
   await expect(page.locator('.team-portrait img')).toHaveCount(4);
   await expect(page.locator('.portrait-note')).toHaveCount(0);
   const members = [
-    ['Dr. Eltonson Rezende', 'welson'],
+    ['Dr. Welson Rezende', 'welson'],
     ['Dr. Rommel Trevenzoli', 'rommel'],
     ['Dr. Osvaldo Marques', 'osvaldo'],
     ['Dr. Wesley Rezende', 'wesley'],

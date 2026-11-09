@@ -1,6 +1,6 @@
 # Publicar a RTM na Locaweb
 
-Baixe o arquivo **SITE-RTM-LOCAWEB.zip** atualizado deste repositório. Ele contém o site, o blog e o painel para criar publicações, além dos retratos da equipe, das imagens, das fontes e do WhatsApp configurado.
+Baixe o arquivo **SITE-RTM-LOCAWEB.zip** atualizado deste repositório. Ele contém o site, o blog e o painel para criar publicações, além da marca oficial, dos retratos da equipe, das imagens, das fontes e do WhatsApp configurado.
 
 O blog precisa de **PHP 8.1 ou mais recente**, **sessões** e **Fileinfo** habilitados na hospedagem; recomenda-se **PHP 8.2 ou mais recente**. A disponibilidade desses recursos no seu plano da Locaweb ainda precisa ser conferida. O PHP também deve permitir gravação nas pastas de dados e imagens indicadas abaixo.
 
@@ -44,7 +44,9 @@ Se o painel informar que não pode criar ou gravar essas pastas, peça ao suport
 
 Este ZIP contém a versão confirmada pelo responsável, com publicação real pelo painel e a faixa superior “Versão de apresentação” retirada a seu pedido. Permanecem os dados profissionais pendentes e os documentos de privacidade e termos preliminares. As cinco pautas sugeridas da página inicial continuam em preparação; os artigos criados e publicados pelo painel são conteúdos separados. O WhatsApp confirmado é **(31) 99196-7003**.
 
-O metadado `noindex, nofollow` permanece ativo: a página pode ser acessada pelo domínio, mas solicita aos mecanismos de busca que não a indexem. Ele poderá ser retirado na finalização das informações institucionais. As fotografias editoriais são ilustrativas. A foto coletiva fornecida aparece acima dos perfis, e os retratos de Dr. Eltonson Rezende, Dr. Rommel Trevenzoli, Dr. Osvaldo Marques e Dr. Wesley Rezende continuam nos cartões e nos perfis da equipe. Os registros da OAB e as biografias continuam pendentes.
+O metadado `noindex, nofollow` permanece ativo: a página pode ser acessada pelo domínio, mas solicita aos mecanismos de busca que não a indexem. Ele poderá ser retirado na finalização das informações institucionais. As fotografias editoriais são ilustrativas. A foto coletiva fornecida aparece acima dos perfis, e os retratos de Dr. Welson Rezende, Dr. Rommel Trevenzoli, Dr. Osvaldo Marques e Dr. Wesley Rezende continuam nos cartões e nos perfis da equipe. Os registros da OAB e as biografias continuam pendentes.
+
+A marca oficial fornecida foi aplicada no site, blog e painel. Ao atualizar, envie também `images/logo-rtm.webp` e substitua `favicon.svg`, que mantém esse nome e agora contém a marca recebida.
 
 O ZIP contém o front-end compilado, a API PHP, a configuração principal e as licenças das dependências distribuídas. A configuração principal contém o usuário `admin.rtm`, o hash da senha e a identificação de provisionamento; a senha original é fornecida separadamente na conversa e fica fora do ZIP. O antigo cadastro por código de ativação fica desabilitado nesta versão. Somente o administrador principal pode liberar ou revogar editores pelo painel. O código-fonte de desenvolvimento e a prévia independente ficam fora do pacote. As alterações na estrutura do site exigem um novo pacote; os artigos são administrados pelo painel e ficam salvos na hospedagem.
 
