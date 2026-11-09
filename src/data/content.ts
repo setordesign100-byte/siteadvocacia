@@ -42,7 +42,7 @@ export const homepageCopy = {
   },
   team: {
     label: 'NOSSOS PROFISSIONAIS',
-    title: 'Conheça a equipe da RTM Advocacia.',
+    title: 'Conheça a equipe RTM Advocacia e Compliance.',
     text: 'Nossa equipe reúne profissionais dedicados à atuação jurídica nas áreas atendidas pelo escritório.',
     introduction: 'Conheça a trajetória, a formação e as áreas de atuação de cada integrante.',
   },
